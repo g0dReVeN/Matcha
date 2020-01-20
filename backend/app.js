@@ -3,12 +3,14 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const logger = require("morgan");
+const compression = require('compression')
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT;
 const uri = process.env.ATLAS_URI;
 
+app.use(compression());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
