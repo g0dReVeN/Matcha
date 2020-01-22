@@ -26,7 +26,6 @@ const SideBarComponent = () => {
             <Row className={css(styles.mainContainer)} breakpoints={{ 768: css(styles.mainContainerMobile, styles.mainContainerExpanded) }}>
                 <Column className={css(styles.container)} breakpoints={{ 768: css(styles.containerMobile) }}>
                     <ProfileBarComponent />
-                    <ProfileBarComponent />
                 </Column>
             </Row>
         </div>
