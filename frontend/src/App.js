@@ -1,26 +1,68 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Column, Row } from 'simple-flexbox';
+import { StyleSheet, css } from 'aphrodite';
+import SideBarComponent from './components/SideBarComponent';
+import HeaderComponent from './components/HeaderComponent';
+import FooterComponent from './components/FooterComponent';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const styles = StyleSheet.create({
+    container: {
+        height: '100%',
+        minHeight: '100vh'
+    },
+    // content: {
+    //     marginTop: 54
+    // },
+    mainBlock: {
+        backgroundColor: '#f5f7fa',
+        padding: 30,
+        position: 'relative'
+    }
+});
+
+class App extends React.Component {
+    constructor() {
+        super();
+        this.state = { selectedItem: 'Tickets' };
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.resize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resize);
+    }
+
+    resize = () => this.forceUpdate();
+
+    render() {
+        const { selectedItem } = this.state;
+        return (
+            <Row className={css(styles.container)}>
+                <SideBarComponent />
+                <Column flexGrow={1} className={css(styles.mainBlock)}>
+                    <div>
+                        <HeaderComponent />
+                    </div>
+                    <div>1</div>
+                    <div>1</div><div>1</div>
+
+<div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+<div>1</div><div>1</div><div>1</div><div>1</div>
+                    <FooterComponent />
+                </Column>
+            </Row>
+        );
+    }
 }
 
 export default App;
