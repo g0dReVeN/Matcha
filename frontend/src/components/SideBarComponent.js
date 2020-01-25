@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Column } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import ProfileBarComponent from './ProfileBarComponent';
+import UserNotifPanelComponent from './UserNotifPanelComponent';
 
 const styles = StyleSheet.create({
     container: {
@@ -27,6 +28,9 @@ const SideBarComponent = () => {
                 <Column className={css(styles.container)} breakpoints={{ 768: css(styles.containerMobile) }}>
                     <ProfileBarComponent />
                 </Column>
+            </Row>
+            <Row>
+                <UserNotifPanelComponent />
             </Row>
         </div>
     );
