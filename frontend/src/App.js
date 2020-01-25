@@ -5,6 +5,7 @@ import SideBarComponent from './components/SideBarComponent';
 import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
 import './App.css';
+import MainContentComponent from './components/MainContentComponent';
 
 const styles = StyleSheet.create({
     container: {
@@ -17,6 +18,7 @@ const styles = StyleSheet.create({
     mainBlock: {
         backgroundColor: '#f5f7fa',
         padding: 30,
+        width: '100%',
         position: 'relative'
     }
 });
@@ -42,22 +44,9 @@ class App extends React.Component {
         return (
             <Row className={css(styles.container)}>
                 <SideBarComponent />
-                <Column flexGrow={1} className={css(styles.mainBlock)}>
-                    <div>
-                        <HeaderComponent />
-                    </div>
-                    <div>1</div>
-                    <div>1</div><div>1</div>
-
-<div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
-<div>1</div><div>1</div><div>1</div><div>1</div>
+                <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
+                    <HeaderComponent/>
+                    <MainContentComponent />
                     <FooterComponent />
                 </Column>
             </Row>

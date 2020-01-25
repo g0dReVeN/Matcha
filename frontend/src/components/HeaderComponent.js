@@ -6,7 +6,11 @@ import { StyleSheet, css } from 'aphrodite';
 const styles = StyleSheet.create({
     container: {
         height: 40,
-        backgroundColor: '#03fcf4'
+        backgroundColor: '#03fcf4',
+        // position: 'absolute',
+        // top: 0,
+        width: '100%',
+        marginBottom: 100,
     },
     title: {
         fontFamily: 'Arial',
