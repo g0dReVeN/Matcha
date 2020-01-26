@@ -23,6 +23,20 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    gender: {
+        type: Number
+    },
+    sexualPreference: {
+        type: Number,
+        default: '0'
+    },
+    biography: {
+        type: String
+    },
+    completedProfile: {
+        type: Boolean,
+        default: false
+    },
     resetToken: String,
     resetTokenExpiration: Date,
     activeStatus: {
