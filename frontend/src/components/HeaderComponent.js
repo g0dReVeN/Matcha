@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         // top: 0,
         width: '100%',
-        marginBottom: 100,
+        marginBottom: 50,
     },
     title: {
         fontFamily: 'Arial',
