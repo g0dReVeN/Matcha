@@ -10,9 +10,12 @@ import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
 
 const styles = StyleSheet.create({
-    container: {
+    container1: {
         height: '100%',
-        // minHeight: '100vh'
+        minHeight: '100vh',
+    },
+    container2: {
+        height: '100%',
         width: '100%',
     },
     // content: {
@@ -49,7 +52,7 @@ class App extends React.Component {
 
         if (isLoggedIn)
             return (
-                <Row className={css(styles.container)}>
+                <Row className={css(styles.container1)}>
                     <SideBarComponent />
                     <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
                         <HeaderComponent/>
@@ -60,7 +63,7 @@ class App extends React.Component {
             );
         else
             return (
-                <Row className={css(styles.container)} vertical="center" horizontal="center">
+                <Row className={css(styles.container2)} vertical="center" horizontal="center">
                     <LoginComponent />
                 </Row>
             );
