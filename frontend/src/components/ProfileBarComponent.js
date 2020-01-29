@@ -2,6 +2,7 @@ import React from 'react';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import logOut from '../icons/logout.svg';
+import UserNotifPanelComponent from './UserNotifPanelComponent';
 
 const styles = StyleSheet.create({
     container: {
@@ -47,9 +48,6 @@ const styles = StyleSheet.create({
     logoutB: {
         position: 'absolute',
         left: 300,
-        // backgroundColor: '#FFF',
-        // border: '1px solid #FFF',
-        // borderRadius: '50%',
         height: 40,
         width:  40
     }
