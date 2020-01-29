@@ -23,20 +23,25 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    gender: {
-        type: Number
+    age: Number,
+    location: Array,
+    fameRating: {
+        type: Number,
+        default: '0',
+        min: -100,
+        max: 100
     },
+    gender: Number,
     sexualPreference: {
         type: Number,
         default: '0'
     },
-    biography: {
-        type: String
-    },
+    biography: String,
     completedProfile: {
         type: Boolean,
         default: false
     },
+    blockedByUsers: Array,
     resetToken: String,
     resetTokenExpiration: Date,
     activeStatus: {

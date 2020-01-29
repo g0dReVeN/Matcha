@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Notification = require('../models/notifications');
+const History = require('../models/history');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
@@ -16,44 +18,55 @@ exports.postRegistration = (req, res, next) => {
       if (user) {
         return res.status(400).json('Username already exists!');
       }
+      crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+          console.log(err);
+          return res.redirect('/reset');
+        }
+        const token = buffer.toString('hex');
+        let user;
+        bcrypt.hash(password, 12)
+          .then(hashedPassword => {
+            user = new User({
+              username: username,
+              firstname: firstname,
+              lastname: lastname,
+              email: email,
+              password: hashedPassword,
+              resetToken: token,
+              resetTokenExpiration: Date.now() + 864000000
+            });
+            user.save();
+          })
+          .then(result => {
+            const notification = new Notification({
+              userId: user._id,
+              notificationList: []
+            });
+            notification.save();
+            const history = new History({
+              userId: user._id,
+              historyList: ["Entry"]
+            });
+            history.save();
+            res.json('User created!')
+            return transporter.sendMail({
+              to: email,
+              from: 'we@matcha.com',
+              subject: 'Signup succeeded!',
+              html: `
+                    <h1>You successfully signed up!</h1>
+                    <p>Click this <a href="http://localhost:5000/confirm/${token}">link</a> to continue.</p>
+                  `
+            });
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(400).json('Error: ' + err);
+          });
+      });
     });
 
-  crypto.randomBytes(32, (err, buffer) => {
-    if (err) {
-      console.log(err);
-      return res.redirect('/reset');
-    }
-    const token = buffer.toString('hex');
-    bcrypt.hash(password, 12)
-      .then(hashedPassword => {
-        const user = new User({
-          username: username,
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          password: hashedPassword,
-          resetToken: token,
-          resetTokenExpiration: Date.now() + 864000000
-        });
-        return user.save();
-      })
-      .then(result => {
-        res.json('User created!')
-        return transporter.sendMail({
-          to: email,
-          from: 'we@matcha.com',
-          subject: 'Signup succeeded!',
-          html: `
-                <h1>You successfully signed up!</h1>
-                <p>Click this <a href="http://localhost:5000/confirm/${token}">link</a> to continue.</p>
-              `
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(400).json('Error: ' + err);
-      });
-  });
 }
 
 exports.postLogin = (req, res, next) => {
@@ -76,7 +89,16 @@ exports.postLogin = (req, res, next) => {
           }
           req.session.isLoggedIn = true;
           req.session.user = user;
-          return res.status(200).json(`User logged in! Session token: ${req.sessionID}`);
+          const app = require('../app');
+          let sessionResult;
+          app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {
+            if (session) {
+              sessionResult = 'SessionID found';
+            } else {
+              sessionResult = 'SessionID NOT found';
+            }
+            return res.status(200).json(`User logged in! Session token: ${req.sessionID}` + ' Oh and : ' + sessionResult);
+          });
         })
     })
     .catch(err => {
@@ -85,17 +107,30 @@ exports.postLogin = (req, res, next) => {
 }
 
 exports.postLogout = (req, res, next) => {
-  console.log(req.session);
+  const app = require('../app');
+  app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {
+    if (session) {
+      console.log('SessionID found');
+    } else {
+      console.log('SessionID not found');
+    }
+  });
   req.session.destroy(err => {
     if (err) {
       console.log(err);
       return res.status(400).json('Error logging user out: ' + err);
     }
-  });
-  console.log(req.session);
-  return res.status(200).json('User successfully logged out!');
+    let sessionResult;
+    app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {
+      if (session) {
+        sessionResult = 'SessionID found';
+      } else {
+        sessionResult = 'SessionID NOT found';
+      }
+      return res.status(200).json('User successfully logged out!' + ' Oh and : ' + sessionResult);
+    });
+  })
 };
-
 
 exports.getUserConfirmation = (req, res, next) => {
   const token = req.params.token;

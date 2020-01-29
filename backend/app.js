@@ -20,7 +20,7 @@ const store = new MongoDBStore({
 
 app.use(session(
     {
-        cookie: { maxAge: 360000 },
+        cookie: { maxAge: 1000 * 60 * 60 },
         secret: 'my secret',
         resave: false,
         saveUninitialized: false,
@@ -45,8 +45,10 @@ app.use((req, res, next) => {
 });
 
 const authRouter = require('./routes/auth');
+const adminRouter = require('./routes/admin');
 
 app.use(authRouter);
+app.use('/admin', adminRouter);
 
 mongoose.connect(mongodb_uri,
     {
@@ -57,6 +59,7 @@ mongoose.connect(mongodb_uri,
 );
 
 const connection = mongoose.connection;
+
 connection.once('open', () => {
     console.log("Mongodb successfully connected to 'Matcha' database!");
 });
@@ -64,3 +67,5 @@ connection.once('open', () => {
 app.listen(port, () => {
     console.log("Server is listening on port: ", port);
 });
+
+exports.connection = connection;
