@@ -97,7 +97,7 @@ exports.postLogin = (req, res, next) => {
             } else {
               sessionResult = 'SessionID NOT found';
             }
-            return res.status(200).json(`User logged in! Session token: ${req.sessionID}` + ' Oh and : ' + sessionResult);
+            return res.status(200).json(`User logged in!`);
           });
         })
     })
