@@ -88,7 +88,7 @@ exports.postLogin = (req, res, next) => {
             return res.status(400).json('Password is invalid!');
           }
           req.session.isLoggedIn = true;
-          req.session.user = user;
+          req.session.userId = user._id;
           const app = require('../app');
           let sessionResult;
           app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {

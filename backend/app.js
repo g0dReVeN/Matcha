@@ -22,9 +22,10 @@ app.use(session(
     {
         cookie: { maxAge: 1000 * 60 * 60 },
         secret: 'my secret',
-        resave: false,
+        resave: true,
         saveUninitialized: false,
-        store: store
+        store: store,
+        userId: mongoose.Schema.Types.ObjectId
     }
 ));
 
