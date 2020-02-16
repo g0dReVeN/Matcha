@@ -47,10 +47,10 @@ class App extends React.Component {
                 .then(res => {
                     console.log(res.data);
                     if (res.status === 200)
-                        window.localStorage.access_token = res.data.token;
+                        // window.localStorage.access_token = res.data.token;
                         this.setState({
-                            isLoggedIn: true,
-                            userInfo: jwt.decode(window.localStorage.access_token, { json: true }),
+                            isLoggedIn: false,
+                            // userInfo: jwt.decode(window.localStorage.access_token, { json: true }),
                         });
                 });
 
