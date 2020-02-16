@@ -1,7 +1,7 @@
 import React from 'react';
-import { string } from 'prop-types';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles'
-import { Row, Column } from 'simple-flexbox';
+import { Column } from 'simple-flexbox';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -45,31 +45,50 @@ const LoginComponent = (props) => {
     const preventDefault = event => event.preventDefault();
 
     const [values, setValues] = React.useState({
-        amount: '',
+        username: '',
         password: '',
-        weight: '',
-        weightRange: '',
         showPassword: false,
-      });
-    
-      const handleChange = prop => event => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
-    
-      const handleClickShowPassword = () => {
+    });
+
+    const handleChange = value => event => {
+        setValues({ ...values, [value]: event.target.value });
+    };
+
+    const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
-      };
-    
-      const handleMouseDownPassword = event => {
+    };
+
+    const handleMouseDownPassword = event => {
         event.preventDefault();
-      };
+    };
+
+    const registerScreen = event => {
+        event.preventDefault();
+        props.registerScreen(true);
+    };
+
+    const loginUser = event => {
+        event.preventDefault();
+
+        const userInfo = {
+            username: values.username,
+            password: values.password,
+        };
+
+        axios.post('http://localhost:5000' + '/login', userInfo)
+            .then(res => {
+                console.log(res.data);
+                if (res.status === 200)
+                    props.mainContent(true);
+            });
+    };
 
     return (
         <Column className={classes.root} vertical="center" horizontal="center">
             <HeaderComponent />
             <form className={classes.form} noValidate autoComplete="off">
                 <Column vertical="center" horizontal="center">
-                    <TextField required className={classes.field} label="Email" variant="outlined" />
+                    <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
                     <FormControl required className={classes.field} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
@@ -78,16 +97,16 @@ const LoginComponent = (props) => {
                             value={values.password}
                             onChange={handleChange('password')}
                             endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
                             }
                             labelWidth={70}
                         />
@@ -95,8 +114,8 @@ const LoginComponent = (props) => {
                     <Link className={classes.text} href="#" onClick={preventDefault} variant="body2">
                         {'Forgot Password?'}
                     </Link>
-                    <Button className={classes.btn} variant="outlined">Login</Button>
-                    <Button className={classes.btn} variant="outlined">Register</Button>
+                    <Button className={classes.btn} onClick={loginUser}  variant="outlined">Login</Button>
+                    <Button className={classes.btn} onClick={registerScreen} variant="outlined">Register</Button>
                 </Column>
             </form>
             <FooterComponent />

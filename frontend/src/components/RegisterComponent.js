@@ -1,7 +1,7 @@
 import React from 'react';
-import { string } from 'prop-types';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles'
-import { Row, Column } from 'simple-flexbox';
+import { Column } from 'simple-flexbox';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -39,40 +39,62 @@ const useStyles = makeStyles({
 });
 
 const RegisterComponent = (props) => {
-    // const { icon, title, ...otherProps } = props;
     const classes = useStyles();
 
-    const preventDefault = event => event.preventDefault();
-
     const [values, setValues] = React.useState({
-        amount: '',
+        username: '',
+        firstname: '',
+        lastname: '',
+        email: '',
         password: '',
-        weight: '',
-        weightRange: '',
         showPassword: false,
-      });
-    
-      const handleChange = prop => event => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
-    
-      const handleClickShowPassword = () => {
+    });
+
+    const handleChange = value => event => {
+        setValues({ ...values, [value]: event.target.value });
+    };
+
+    const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
-      };
-    
-      const handleMouseDownPassword = event => {
+    };
+
+    const handleMouseDownPassword = event => {
         event.preventDefault();
-      };
+    };
+
+    const loginScreen = event => {
+        event.preventDefault();
+        props.registerScreen(false);
+    };
+
+    const registerUser = event => {
+        event.preventDefault();
+        
+        const userInfo = {
+            username: values.username,
+            firstname: values.firstname,
+            lastname: values.lastname,
+            email: values.email,
+            password: values.password,
+        };
+
+        axios.post('http://localhost:5000' + '/register', userInfo)
+            .then(res => {
+                console.log(res.data);
+                if (res.status === 200)
+                    props.registerScreen(false);
+            });
+    };
 
     return (
         <Column className={classes.root} vertical="center" horizontal="center">
             <HeaderComponent />
             <form className={classes.form} noValidate autoComplete="off">
                 <Column vertical="center" horizontal="center">
-                    <TextField required className={classes.field} label="Email" variant="outlined" />
-                    <TextField required className={classes.field} label="Username" variant="outlined" />
-                    <TextField required className={classes.field} label="Surname" variant="outlined" />
-                    <TextField required className={classes.field} label="First Name" variant="outlined" />
+                    <TextField required className={classes.field} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
+                    <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
+                    <TextField required className={classes.field} label="Surname" variant="outlined" value={values.lastname} onChange={handleChange('lastname')}/>
+                    <TextField required className={classes.field} label="First Name" variant="outlined" value={values.firstname} onChange={handleChange('firstname')}/>
                     <FormControl required className={classes.field} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
@@ -81,22 +103,22 @@ const RegisterComponent = (props) => {
                             value={values.password}
                             onChange={handleChange('password')}
                             endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
                             }
                             labelWidth={70}
                         />
                     </FormControl>
-                    <Button className={classes.btn} variant="outlined">Register</Button>
-                    <Link className={classes.text} href="#" onClick={preventDefault} variant="body2">
+                    <Button className={classes.btn} variant="outlined" onClick={registerUser}>Register</Button>
+                    <Link className={classes.text} href="#" onClick={loginScreen} variant="body2">
                         {'Login Instead?'}
                     </Link>
                 </Column>
