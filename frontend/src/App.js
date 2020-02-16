@@ -84,7 +84,7 @@ class App extends React.Component {
         if (this.state.isLoggedIn)
             return (
                 <Row className={css(styles.container1)}>
-                    <SideBarComponent />
+                    <SideBarComponent userInfo={this.userInfo} />
                     <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
                         <HeaderComponent />
                         <MainContentComponent />

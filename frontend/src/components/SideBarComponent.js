@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     }
 });
 
-const SideBarComponent = () => {
+const SideBarComponent = (props) => {
     return (
         <div style={{ position: 'relative' }}>
             <Row className={css(styles.mainContainer)} breakpoints={{ 768: css(styles.mainContainerMobile, styles.mainContainerExpanded) }}>
                 <Column className={css(styles.container)} breakpoints={{ 768: css(styles.containerMobile) }}>
-                    <ProfileBarComponent />
+                    <ProfileBarComponent userInfo={props.userInfo} />
                 </Column>
             </Row>
             <Row>
