@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import SideBarComponent from './components/SideBarComponent';
@@ -41,15 +42,22 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000' + '/admin/userInfo')
-            .then(res => {
-                console.log(res.data);
-                if (res.status === 200)
-                    this.setState({
-                        isLoggedIn: true,
-                        userInfo: res.data,
-                    });
-            });
+        if (localStorage.hasOwnProperty('access_token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_token}`,
+                }
+            }
+            axios.get('http://localhost:5000', config)
+                .then(res => {
+                    console.log(res.data);
+                    if (res.status === 200)
+                        // window.localStorage.access_token = res.data.token;
+                        this.setState({
+                            isLoggedIn: true,
+                            userInfo: jwt.decode(localStorage.access_token, { json: true }),
+                        });
+                });
 
         window.addEventListener('resize', this.resize);
     }
@@ -64,15 +72,19 @@ class App extends React.Component {
         this.setState({ register: value });
     };
 
-    mainContent = value => {
-        this.setState({ isLoggedIn: value });
+    mainContent = token => {
+        localStorage.access_token = token;
+        this.setState({
+            isLoggedIn: true,
+            userInfo: jwt.decode(localStorage.access_token, { json: true }),
+        });
     };
 
     render() {
         if (this.state.isLoggedIn)
             return (
                 <Row className={css(styles.container1)}>
-                    <SideBarComponent />
+                    <SideBarComponent userInfo={this.userInfo} />
                     <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
                         <HeaderComponent />
                         <MainContentComponent />

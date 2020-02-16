@@ -57,8 +57,8 @@ const ProfileBarComponent = (props) => {
     return (
         <Row className={css(styles.container)} horizontal="start" vertical="center">
             <div className={css(styles.proPic)}></div>
-            <div className={css(styles.title)}>{props.name}</div>
-            <div className={css(styles.frameR)}>{props.frameR}</div>
+            <div className={css(styles.title)}>{props.userInfo.username}</div>
+            <div className={css(styles.frameR)}>{props.userInfo.frameRating}</div>
             <div className={css(styles.logoutB)}>
                 <img src={logOut}></img>
             </div>

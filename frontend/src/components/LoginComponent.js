@@ -79,7 +79,7 @@ const LoginComponent = (props) => {
             .then(res => {
                 console.log(res.data);
                 if (res.status === 200)
-                    props.mainContent(true);
+                    props.mainContent(res.data.token);
             });
     };
 
