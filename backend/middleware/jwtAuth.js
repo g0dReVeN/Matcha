@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const jwt_private_key = process.env.JWT_PRIVATE_KEY;
+const jwt_public_key = process.env.JWT_PUBLIC_KEY;
 
 exports.signToken = (user) => {
   return new Promise(token => {
@@ -20,17 +21,21 @@ exports.signToken = (user) => {
   });
 }
 
-exports.verifyToken = (req, res, next) => {
-  const token = req.get('token') || req.body.token;
-  if (!token)
-    return res.json({ success: false, msg: "No token provided" });
-  jwt.verify(token, jwt_private_key, (err, decodedData) => {
-    if (err)
-      return res.json({ success: false, msg: "Invalid token." });
-    User.findById(decodedData._id, (err, user) => {
-      if (!user) return res.json({ success: false, msg: "Invalid token." });
-      req.user = user;
-      next();
+exports.verifyToken = (token) => {
+  return new Promise((response) => {
+    if (!token) {
+      return response({ success: false, msg: "No token provided" });
+    }
+    jwt.verify(token, jwt_public_key, (err, decodedData) => {
+      if (err) {
+        return response({ success: false, msg: "Invalid token." });
+      }
+      User.findById(decodedData._id, (err, user) => {
+        if (!user) {
+          return response({ success: false, msg: "User does not exist." });
+        }
+        return response({ success: true, msg: "Token valid!", user: user });
+      });
     });
   });
 }

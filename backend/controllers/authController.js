@@ -92,7 +92,7 @@ exports.postLogin = (req, res, next) => {
           if (!match) {
             return res.status(400).json({ success: false, msg: 'Password is invalid!' });
           }
-          
+
           signToken(user)
             .then(token => {
               if (!token) {
