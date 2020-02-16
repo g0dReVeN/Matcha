@@ -42,15 +42,20 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        if (window.localStorage.hasOwnProperty('access_token'))
-            axios.get('http://localhost:5000')
+        if (localStorage.hasOwnProperty('access_token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_token}`,
+                }
+            }
+            axios.get('http://localhost:5000', config)
                 .then(res => {
                     console.log(res.data);
                     if (res.status === 200)
                         // window.localStorage.access_token = res.data.token;
                         this.setState({
                             isLoggedIn: true,
-                            userInfo: jwt.decode(window.localStorage.access_token, { json: true }),
+                            userInfo: jwt.decode(localStorage.access_token, { json: true }),
                         });
                 });
 
@@ -68,10 +73,10 @@ class App extends React.Component {
     };
 
     mainContent = token => {
-        window.localStorage.access_token = token;
+        localStorage.access_token = token;
         this.setState({
             isLoggedIn: true,
-            userInfo: jwt.decode(window.localStorage.access_token, { json: true }),
+            userInfo: jwt.decode(localStorage.access_token, { json: true }),
         });
     };
 
