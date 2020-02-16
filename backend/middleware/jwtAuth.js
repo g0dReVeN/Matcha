@@ -24,7 +24,7 @@ exports.verifyToken = (req, res, next) => {
   const token = req.get('token') || req.body.token;
   if (!token)
     return res.json({ success: false, msg: "No token provided" });
-  jwt.verify(token, jwt_secret, (err, decodedData) => {
+  jwt.verify(token, jwt_private_key, (err, decodedData) => {
     if (err)
       return res.json({ success: false, msg: "Invalid token." });
     User.findById(decodedData._id, (err, user) => {

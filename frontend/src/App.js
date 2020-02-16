@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import SideBarComponent from './components/SideBarComponent';
@@ -41,15 +42,17 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000' + '/admin/userInfo')
-            .then(res => {
-                console.log(res.data);
-                if (res.status === 200)
-                    this.setState({
-                        isLoggedIn: true,
-                        userInfo: res.data,
-                    });
-            });
+        if (window.localStorage.hasOwnProperty('access_token'))
+            axios.get('http://localhost:5000')
+                .then(res => {
+                    console.log(res.data);
+                    if (res.status === 200)
+                        window.localStorage.access_token = res.data.token;
+                        this.setState({
+                            isLoggedIn: true,
+                            userInfo: jwt.decode(window.localStorage.access_token, { json: true }),
+                        });
+                });
 
         window.addEventListener('resize', this.resize);
     }
@@ -64,8 +67,12 @@ class App extends React.Component {
         this.setState({ register: value });
     };
 
-    mainContent = value => {
-        this.setState({ isLoggedIn: value });
+    mainContent = token => {
+        window.localStorage.access_token = token;
+        this.setState({
+            isLoggedIn: true,
+            userInfo: jwt.decode(window.localStorage.access_token, { json: true }),
+        });
     };
 
     render() {
