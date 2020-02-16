@@ -1,24 +1,17 @@
-const jwt = require('jsonwebtoken');
-
-const User = require('../models/user');
-
-const jwt_private_key = process.env.JWT_PRIVATE_KEY;
+const verifyToken = require('./jwtAuth').verifyToken;
 
 module.exports = (req, res, next) => {
   const token = req.get('Authorization') || req.body.token;
-  if (!token) {
-    return res.json({ success: false, message: "No token provided" });
-  }
-  jwt.verify(token, jwt_private_key, (err, decodedData) => {
-    if (err) {
-      return res.json({ success: false, message: "Invalid token." });
+  verifyToken(token)
+  .then((response) => {
+    if (response.success === false) {
+      console.log(response);
+      return res.status(400).json(response);
     }
-    User.findById(decodedData._id, (err, user) => {
-      if (!user) {
-        return res.json({ success: false, message: "Invalid token." });
-      }
-      req.user = user;
-      next();
-    })
+    req.user = response.user;
+    next();
+  })
+  .catch(err => {
+    console.log(err);
   })
 }
