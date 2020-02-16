@@ -49,6 +49,7 @@ exports.postProfile = (req, res, next) => {
 }
 
 exports.getUserObject = (req, res, next) => {
+    console.log(req.user._id);
     return res.status(200).json({
         success: false,
         msg: 'Successfully got user details.',
