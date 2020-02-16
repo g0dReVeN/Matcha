@@ -17,66 +17,72 @@ exports.postProfile = (req, res, next) => {
         Add section for disecting the tags object and creating an array
     */
 
-    User.findById(req.user._id)
-    .then(user => {
+    User.findById(req.session.user.id)
+        .then(user => {
 
-        /* Convert these to MongoDB 'Number' format */
-        user.gender = gender;
-        user.sexualPreference = sexualPreference;
-        user.biography = biography;
-        /**/
-
-        user.completedProfile = true;
-        user.save(err => {
-            if (err) {
-                return res.status(400).json('Error :' + err);
-            }
-            const newTags = new Tags({
-                userId: req.user._id,
-                tags: tags
-            });
-            newTags.save(err => {
+            /* Convert these to MongoDB 'Number' format */
+            user.gender = gender;
+            user.sexualPreference = sexualPreference;
+            /**/
+            user.biography = biography;
+            
+            user.completedProfile = true;
+            user.save(err => {
                 if (err) {
-                    return res.status(400).json('Error adding tags: ' + err);
+                    return res.status(400).json({ msg: 'Error', err });
                 }
-                return res.status(200).json('User profile updated!');
+                const newTags = new Tags({
+                    userId: req.user._id,
+                    tags: tags
+                });
+                newTags.save(err => {
+                    if (err) {
+                        return res.status(400).json({ success: false, msg: 'Error', err });
+                    }
+                    return res.status(200).json({ success: true, msg: 'User profile updated!' });
+                });
             });
+        })
+        .catch(err => {
+            return res.status(400).json({ success: false, msg: 'Error', err });
         });
-    })
-    .catch(err => {
-        return res.status(400).json('Error: ' + err);
-    });
 }
 
 exports.getUserObject = (req, res, next) => {
     return res.status(200).json({
-        "username": req.user.username,
-        "firstname": req.user.firstname,
-        "lastname": req.user.lastname,
-        "email": req.user.email,
-        "age": req.user.age,
-        "location": req.user.location,
-        "fameRating": req.user.fameRating,
-        "gender": req.user.gender,
-        "sexualPreference": req.user.sexualPreference,
-        "biography": req.user.biography,
+        success: false,
+        msg: 'Successfully got user details.',
+        userObj: {
+            "username": req.user.username,
+            "firstname": req.user.firstname,
+            "lastname": req.user.lastname,
+            "email": req.user.email,
+            "age": req.user.age,
+            "location": req.user.location,
+            "fameRating": req.user.fameRating,
+            "gender": req.user.gender,
+            "sexualPreference": req.user.sexualPreference,
+            "biography": req.user.biography,
+        }
     });
 }
 
 exports.postHistory = (req, res, next) => {
     const refId = req.body.refId;
-    
-    History.findOne({ "userId": req.user._id })
-    .then(history => {
-        history.historyList.push({$each: [req.user._id]});
-        history.save(err => {
-            if (err) {
-                return res.status(400).json('Error adding history: ' + err);
-            }
-            return res.status(200).json('History added!');
+    console.log(req.session.user);
+
+    History.findOne({ "userId": req.session.user.id })
+        .then(history => {
+            console.log("Found the history");
+            history.historyList.push({ $each: [refId] });
+            history.save(err => {
+                if (err) {
+                    return res.status(400).json({ success: false, msg: 'Error adding history', err });
+                }
+                return res.status(200).json({ success: true, msg: 'History added!' });
+            });
+        })
+        .catch(err => {
+            return res.status(400).json({ success: false, msg: 'Error', err });
         });
-    })
-    .catch(err => {
-        return res.status(400).json('Error: ' + err);
-    });
 }
