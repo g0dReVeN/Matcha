@@ -1,10 +1,15 @@
-const User = require('../models/user');
-const Notification = require('../models/notifications');
-const History = require('../models/history');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
+const User = require('../models/user');
+const Notification = require('../models/notifications');
+const History = require('../models/history');
+
+const signToken = require('../middleware/jwtAuth').signToken;
+
 const transporter = require('../config/sendgrid');
+
+const session_name = process.env.SESSION_NAME;
 
 exports.postRegistration = (req, res, next) => {
   const username = req.body.username;
@@ -16,14 +21,14 @@ exports.postRegistration = (req, res, next) => {
   User.findOne({ username: username })
     .then(user => {
       if (user) {
-        return res.status(400).json('Username already exists!');
+        return res.status(400).json({ success: false, msg: 'Username already exists!' });
       }
       crypto.randomBytes(32, (err, buffer) => {
         if (err) {
           console.log(err);
-          return res.redirect('/reset');
+          return res.status(400).json({ success: false, msg: 'Error', err });
         }
-        const token = buffer.toString('hex');
+        const statusToken = buffer.toString('hex');
         let user;
         bcrypt.hash(password, 12)
           .then(hashedPassword => {
@@ -33,7 +38,7 @@ exports.postRegistration = (req, res, next) => {
               lastname: lastname,
               email: email,
               password: hashedPassword,
-              resetToken: token,
+              resetToken: statusToken,
               resetTokenExpiration: Date.now() + 864000000
             });
             user.save();
@@ -46,23 +51,23 @@ exports.postRegistration = (req, res, next) => {
             notification.save();
             const history = new History({
               userId: user._id,
-              historyList: ["Entry"]
+              historyList: []
             });
             history.save();
-            res.json('User created!')
+            res.status(200).json({ success: true, msg: "User created!" });
             return transporter.sendMail({
               to: email,
               from: 'we@matcha.com',
               subject: 'Signup succeeded!',
               html: `
                     <h1>You successfully signed up!</h1>
-                    <p>Click this <a href="http://localhost:5000/confirm/${token}">link</a> to continue.</p>
+                    <p>Click this <a href="http://localhost:5000/confirm/${statusToken}">link</a> to continue.</p>
                   `
             });
           })
           .catch(err => {
             console.log(err);
-            res.status(400).json('Error: ' + err);
+            res.status(400).json({ success: false, msg: 'Error', err });
           });
       });
     });
@@ -76,79 +81,63 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ username: username })
     .then(user => {
       if (!user) {
-        return res.status(400).json('User not found!');
+        return res.status(400).json({ success: false, msg: 'User not found!' });
       }
       if (!user.activeStatus) {
-        return res.status(400).json('User not active!');
+        return res.status(400).json({ success: false, msg: 'User not active!' });
       }
       bcrypt
         .compare(password, user.password)
         .then(match => {
           if (!match) {
-            return res.status(400).json('Password is invalid!');
+            return res.status(400).json({ success: false, msg: 'Password is invalid!' });
           }
-          req.session.isLoggedIn = true;
-          req.session.user = user;
-          const app = require('../app');
-          let sessionResult;
-          app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {
-            if (session) {
-              sessionResult = 'SessionID found';
-            } else {
-              sessionResult = 'SessionID NOT found';
-            }
-            return res.status(200).json(`User logged in!`);
-          });
+          
+          signToken(user)
+            .then(token => {
+              if (!token) {
+                return res.status(400).json({ success: false, msg: 'Token could not be generated at this time' });
+              }
+              return res.status(200).json({ success: true, msg: "User created! Token attached.", token });
+            })
         })
     })
     .catch(err => {
-      return res.status(400).json('Error: ' + err);
+      return res.status(400).json({ success: false, msg: 'Error', err });
     });
 }
 
 exports.postLogout = (req, res, next) => {
-  const app = require('../app');
-  app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {
-    if (session) {
-      console.log('SessionID found');
-    } else {
-      console.log('SessionID not found');
-    }
-  });
   req.session.destroy(err => {
     if (err) {
       console.log(err);
-      return res.status(400).json('Error logging user out: ' + err);
+      return res.status(400).json({ success: false, msg: 'Error logging user out', err });
     }
-    let sessionResult;
-    app.connection.collection('sessions').findOne({ _id: req.sessionID }, (err, session) => {
-      if (session) {
-        sessionResult = 'SessionID found';
-      } else {
-        sessionResult = 'SessionID NOT found';
-      }
-      return res.status(200).json('User successfully logged out!' + ' Oh and : ' + sessionResult);
-    });
-  })
+    res.clearCookie(session_name);
+    return res.status(200).json({ success: true, msg: 'User has successfully been logged out!' });
+  });
 };
 
 exports.getUserConfirmation = (req, res, next) => {
-  const token = req.params.token;
+  const resetToken = req.params.token;
 
-  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+  User.findOne({ resetToken: resetToken, resetTokenExpiration: { $gt: Date.now() } })
     .then(user => {
       if (!user) {
-        return res.status(400).json('Invalid token!');
+        return res.status(400).json({ success: false, msg: 'Invalid token!' });
       }
       user.activeStatus = true;
       user.save(err => {
         if (err) {
-          return res.status(400).json('User could not be created!');
+          return res.status(400).json({ success: false, msg: 'User could not be verified!' });
         }
-        return res.status(200).json('User is now active!');
+        const token = signToken(user);
+        if (!token)
+          return res.status(400).json({ success: false, msg: 'Token could not be generated at this time' });
+        return res.status(200).json({ success: true, msg: 'User is now active!', token });
       })
     })
     .catch(err => {
-      return res.status(400).json('Error: ' + err);
+      return res.status(400).json({ success: false, msg: 'Error', err });
     });
 }
