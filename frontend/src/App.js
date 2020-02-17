@@ -42,10 +42,10 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        if (localStorage.hasOwnProperty('access_token'))
+        if (localStorage.hasOwnProperty('access_token')) {
             const config = {
                 headers: {
-                    Authorization: `Bearer ${localStorage.access_token}`,
+                    'Authorization': `${localStorage.access_token}`,
                 }
             }
             axios.get('http://localhost:5000', config)
@@ -58,7 +58,7 @@ class App extends React.Component {
                             userInfo: jwt.decode(localStorage.access_token, { json: true }),
                         });
                 });
-
+        }
         window.addEventListener('resize', this.resize);
     }
 
@@ -84,7 +84,7 @@ class App extends React.Component {
         if (this.state.isLoggedIn)
             return (
                 <Row className={css(styles.container1)}>
-                    <SideBarComponent userInfo={this.userInfo} />
+                    <SideBarComponent userInfo={this.state.userInfo} />
                     <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
                         <HeaderComponent />
                         <MainContentComponent />

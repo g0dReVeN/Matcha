@@ -77,7 +77,7 @@ const LoginComponent = (props) => {
 
         axios.post('http://localhost:5000' + '/login', userInfo)
             .then(res => {
-                console.log(res.data);
+                console.log(res.data.token);
                 if (res.status === 200)
                     props.mainContent(res.data.token);
             });

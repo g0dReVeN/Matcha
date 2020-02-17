@@ -5,7 +5,7 @@ const jwt_public_key = process.env.JWT_PUBLIC_KEY;
 
 exports.signToken = (user) => {
   return new Promise(token => {
-    console.log(jwt_private_key);
+    // console.log(jwt_private_key);
     const userData = user.toObject();
     delete userData.password;
     jwt.sign(userData, jwt_private_key, {
@@ -28,7 +28,7 @@ exports.verifyToken = (token) => {
     }
     jwt.verify(token, jwt_public_key, (err, decodedData) => {
       if (err) {
-        return response({ success: false, msg: "Invalid token." });
+        return response({ success: false, msg: err });
       }
       User.findById(decodedData._id, (err, user) => {
         if (!user) {
