@@ -1,9 +1,9 @@
 const verifyToken = require('./jwtAuth').verifyToken;
 
 module.exports = (req, res, next) => {
-  const otherToken = req.get('Authorization')
-  const token = req.header('Authorization') || req.body.token;
-  console.log(token + `\n\n\n` + otherToken);
+  const token = req.header('Authorization')
+  // const token = req.header('Authorization') || req.body.token;
+  // console.log(token + `\n\n\n`);
   verifyToken(token)
   .then((response) => {
     if (response.success === false) {

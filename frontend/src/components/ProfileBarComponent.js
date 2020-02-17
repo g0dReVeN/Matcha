@@ -1,8 +1,7 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
-import logOut from '../icons/logout.svg';
-import UserNotifPanelComponent from './UserNotifPanelComponent';
+import lgSVG from '../icons/logout.svg';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,7 +18,8 @@ const styles = StyleSheet.create({
         border: '1px solid #FFF',
         borderRadius: '50%',
         height: 40,
-        width:  40
+        width:  40,
+        cursor: 'pointer',
     },
     title: {
         left: 65,
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         lineHeight: '24px',
         letterSpacing: '0.4px',
         color: '#FFF',
+        cursor: 'pointer',
     },
     frameR: {
         left: 165,
@@ -39,28 +40,46 @@ const styles = StyleSheet.create({
         color: '#ff596a',
         fontWeight: 'bold',
         lineHeight: 2.2,
-        borderBottom: '32px solid #FFF',
+        borderBottom: '32px solid #f5f7fa',
         borderLeft: '8px solid transparent',
         borderRight: '8px solid transparent',
         height: 0,
         width: 32,
+        ':hover': {
+            borderBottom: '32px solid #FFF',
+        },
+        // cursor: 'pointer',
     },
     logoutB: {
         position: 'absolute',
         left: 300,
         height: 40,
-        width:  40
+        width:  40,
+        // cursor: 'pointer',
+    },
+    logout: {
+        ':hover': {
+            fill: '#000',
+        },
+        cursor: 'pointer',
     }
 });
 
 const ProfileBarComponent = (props) => {
+    const signOut = event => {
+        event.preventDefault();
+
+        localStorage.removeItem('access_token');
+        props.logOut(false);
+    };
+
     return (
         <Row className={css(styles.container)} horizontal="start" vertical="center">
             <div className={css(styles.proPic)}></div>
             <div className={css(styles.title)}>{props.userInfo.username}</div>
             <div className={css(styles.frameR)}>{props.userInfo.frameRating}</div>
             <div className={css(styles.logoutB)}>
-                <img src={logOut}></img>
+                <img className={css(styles.logout)} src={lgSVG} onClick={signOut} ></img>
             </div>
         </Row>
     );

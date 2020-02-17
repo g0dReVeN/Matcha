@@ -8,7 +8,7 @@ router.post('/login', authController.postLogin);
 
 router.post('/logout', authController.postLogout);
 
-router.get('/', isAuth, (req, res, next) => { return res.status(200).json({ success: true, msg: 'Token valid' }) });
+router.get('/', isAuth, (req, res) => { return res.status(200).json({ success: true, msg: 'Token valid' }) });
 
 router.get('/confirm/:token', authController.getUserConfirmation);
 

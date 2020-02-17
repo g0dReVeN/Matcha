@@ -35,6 +35,7 @@ class App extends React.Component {
     constructor() {
         super();
         this.state = {
+            isLoadding: true,
             isLoggedIn: false,
             register: false,
             userInfo: {},
@@ -43,48 +44,57 @@ class App extends React.Component {
 
     componentDidMount() {
         if (localStorage.hasOwnProperty('access_token')) {
-            const config = {
-                headers: {
-                    'Authorization': `${localStorage.access_token}`,
-                }
-            }
-            axios.get('http://localhost:5000', config)
+            axios.get('http://localhost:5000', { headers: { 'Authorization': localStorage.access_token } })
                 .then(res => {
-                    console.log(res.data);
                     if (res.status === 200)
-                        // window.localStorage.access_token = res.data.token;
                         this.setState({
+                            isLoadding: false,
                             isLoggedIn: true,
                             userInfo: jwt.decode(localStorage.access_token, { json: true }),
                         });
+                    else
+                        this.setState({
+                            isLoadding: false
+                        });
                 });
         }
-        window.addEventListener('resize', this.resize);
+        else
+            this.setState({ isLoadding: false });
+        // window.addEventListener('resize', this.resize);
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.resize);
-    }
+    // componentWillUnmount() {
+    // window.removeEventListener('resize', this.resize);
+    // }
 
-    resize = () => this.forceUpdate();
+    // resize = () => this.forceUpdate();
 
     registerScreen = value => {
         this.setState({ register: value });
     };
 
+    logOut = value => {
+        this.setState({ isLoggedIn: value });
+    };
+
     mainContent = token => {
         localStorage.access_token = token;
         this.setState({
+            isLoadding: false,
             isLoggedIn: true,
             userInfo: jwt.decode(localStorage.access_token, { json: true }),
         });
     };
 
     render() {
+        if (this.state.isLoadding)
+            return (
+                <div>jou poes</div>
+            );
         if (this.state.isLoggedIn)
             return (
                 <Row className={css(styles.container1)}>
-                    <SideBarComponent userInfo={this.state.userInfo} />
+                    <SideBarComponent userInfo={this.state.userInfo} logOut={this.logOut} />
                     <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
                         <HeaderComponent />
                         <MainContentComponent />

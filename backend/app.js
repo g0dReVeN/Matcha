@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const logger = require("morgan");
-const compression = require('compression')
+const compression = require('compression');
 require('dotenv').config();
 
 const app = express();
