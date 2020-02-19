@@ -12,12 +12,13 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import HeaderComponent from './HeaderComponent';
-import FooterComponent from './FooterComponent';
 
 const useStyles = makeStyles({
     root: {
+        // height: '100%',
         width: '100%',
+        // backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
+        // backgroundSize: '100% 1500px',
     },
     form: {
         marginTop: 70,
@@ -85,7 +86,6 @@ const LoginComponent = (props) => {
 
     return (
         <Column className={classes.root} vertical="center" horizontal="center">
-            <HeaderComponent />
             <form className={classes.form} noValidate autoComplete="off">
                 <Column vertical="center" horizontal="center">
                     <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
@@ -118,7 +118,6 @@ const LoginComponent = (props) => {
                     <Button className={classes.btn} onClick={registerScreen} variant="outlined">Register</Button>
                 </Column>
             </form>
-            <FooterComponent />
         </Column>
     );
 };

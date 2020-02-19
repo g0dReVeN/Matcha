@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     //     marginTop: 54
     // },
     mainBlock: {
-        backgroundColor: '#f5f7fa',
-        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("/assets/background4.jpg")',
+        backgroundColor: '#FFF',
+        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
         // backgroundRepeat: 'no-repeat',
         // backgroundSize: 'cover',
         // padding: 30,
@@ -116,11 +116,23 @@ class App extends React.Component {
             );
         else if (this.state.register)
             return (
-                <RegisterComponent registerScreen={this.registerScreen} />
+                <Row className={css(styles.container1)}>
+                    <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
+                        <HeaderComponent />
+                        <RegisterComponent registerScreen={this.registerScreen} />
+                        <FooterComponent />
+                    </Column>
+                </Row>
             );
         else
             return (
-                <LoginComponent mainContent={this.mainContent} registerScreen={this.registerScreen} />
+                <Row className={css(styles.container1)}>
+                    <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
+                        <HeaderComponent />
+                        <LoginComponent mainContent={this.mainContent} registerScreen={this.registerScreen} />
+                        <FooterComponent />
+                    </Column>
+                </Row>
             );
     }
 }

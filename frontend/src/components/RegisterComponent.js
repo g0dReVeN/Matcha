@@ -12,12 +12,12 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import HeaderComponent from './HeaderComponent';
-import FooterComponent from './FooterComponent';
 
 const useStyles = makeStyles({
     root: {
         width: '100%',
+        // backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
+        // backgroundSize: 'cover',
     },
     form: {
         marginTop: 70,
@@ -88,7 +88,6 @@ const RegisterComponent = (props) => {
 
     return (
         <Column className={classes.root} vertical="center" horizontal="center">
-            <HeaderComponent />
             <form className={classes.form} noValidate autoComplete="off">
                 <Column vertical="center" horizontal="center">
                     <TextField required className={classes.field} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
@@ -123,7 +122,6 @@ const RegisterComponent = (props) => {
                     </Link>
                 </Column>
             </form>
-            <FooterComponent />
         </Column>
     );
 };
