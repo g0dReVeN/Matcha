@@ -2,15 +2,21 @@ import React from 'react';
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
+import logo from '../icons/logo.png';
 
 const styles = StyleSheet.create({
     container: {
-        height: 40,
-        backgroundColor: '#03fcf4',
+        // height: 40,
+        // backgroundColor: '#03fcf4',
         // position: 'absolute',
         // top: 0,
         width: '100%',
         marginBottom: 50,
+        // marginTop: 50,
+        // textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     title: {
         fontFamily: 'Arial',
@@ -38,7 +44,8 @@ const HeaderComponent = (props) => {
     // const { icon, title, ...otherProps } = props;
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between">
-            <span className={css(styles.title)}>Matcha</span>
+            {/* <span className={css(styles.title)}>Matcha</span> */}
+            <img src={logo}/>
         </Row>
     );
 };

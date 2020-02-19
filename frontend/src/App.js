@@ -35,7 +35,6 @@ class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            isLoadding: true,
             isLoggedIn: false,
             register: false,
             userInfo: {},
@@ -44,22 +43,37 @@ class App extends React.Component {
 
     componentDidMount() {
         if (localStorage.hasOwnProperty('access_token')) {
-            axios.get('http://localhost:5000', { headers: { 'Authorization': localStorage.access_token } })
-                .then(res => {
-                    if (res.status === 200)
-                        this.setState({
-                            isLoadding: false,
-                            isLoggedIn: true,
-                            userInfo: jwt.decode(localStorage.access_token, { json: true }),
-                        });
-                    else
-                        this.setState({
-                            isLoadding: false
-                        });
-                });
+            // this.setState({ isLoadding: -1 });
+            // localStorage.removeItem('access_token');
+            // axios.get('http://localhost:5000', { headers: { 'Authorization': localStorage.access_token } })
+            //     .then(res => {
+            //         localStorage.removeItem('access_token');
+            //         if (res.success === true)
+                        // this.setState({
+                        //     isLoadding: false,
+                        //     isLoggedIn: true,
+                        //     userInfo: jwt.decode(localStorage.access_token, { json: true }),
+                        // });
+            //         else {
+            //             localStorage.clear();
+            //             this.setState({ isLoadding: false });
+            //         }
+            //     });
+            jwt.verify(localStorage.access_token, process.env.REACT_APP_JWT_PUBLIC_KEY, { algorithms: ['ES256'] }, (err, payload) => {
+                if (err) {
+                    localStorage.clear();
+                    console.log(err);
+                }
+                else
+                    this.setState({
+                        isLoggedIn: true,
+                        userInfo: payload,
+                    });
+            });
         }
-        else
-            this.setState({ isLoadding: false });
+        else {
+            localStorage.clear();
+        }
         // window.addEventListener('resize', this.resize);
     }
 
@@ -80,17 +94,12 @@ class App extends React.Component {
     mainContent = token => {
         localStorage.access_token = token;
         this.setState({
-            isLoadding: false,
             isLoggedIn: true,
-            userInfo: jwt.decode(localStorage.access_token, { json: true }),
+            userInfo: jwt.verify(localStorage.access_token, process.env.REACT_APP_JWT_PUBLIC_KEY, { algorithms: ['ES256'] }),
         });
     };
 
     render() {
-        if (this.state.isLoadding)
-            return (
-                <div>jou poes</div>
-            );
         if (this.state.isLoggedIn)
             return (
                 <Row className={css(styles.container1)}>

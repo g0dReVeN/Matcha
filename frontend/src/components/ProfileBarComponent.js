@@ -15,14 +15,15 @@ const styles = StyleSheet.create({
         left: 10,
         position: 'absolute',
         backgroundColor: '#FFF',
-        border: '1px solid #FFF',
+        // border: '1px solid #FFF',
+        border: '5px double #ff596a',
         borderRadius: '50%',
         height: 40,
         width:  40,
         cursor: 'pointer',
     },
     title: {
-        left: 65,
+        left: 70,
         position: 'absolute',
         fontFamily: 'Arial',
         fontStyle: 'normal',
@@ -34,20 +35,29 @@ const styles = StyleSheet.create({
         cursor: 'pointer',
     },
     frameR: {
-        left: 165,
+        right: 60,
         position: 'absolute',
-        textAlign: 'center',
+        backgroundColor: '#FFF',
+        // textAlign: 'center',
+        // textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         color: '#ff596a',
         fontWeight: 'bold',
-        lineHeight: 2.2,
-        borderBottom: '32px solid #f5f7fa',
-        borderLeft: '8px solid transparent',
-        borderRight: '8px solid transparent',
-        height: 0,
-        width: 32,
-        ':hover': {
-            borderBottom: '32px solid #FFF',
-        },
+        // lineHeight: 2.2,
+        // borderBottom: '32px solid #f5f7fa',
+        // borderLeft: '8px solid transparent',
+        // borderRight: '8px solid transparent',
+        // height: 0,
+        // width: 32,
+        height: 40,
+        width:  40,
+        border: '5px double #ff596a',
+        borderRadius: '50%',
+        // ':hover': {
+        //     borderBottom: '32px solid #FFF',
+        // },
         // cursor: 'pointer',
     },
     logoutB: {
@@ -55,12 +65,14 @@ const styles = StyleSheet.create({
         left: 300,
         height: 40,
         width:  40,
+        // borderRadius: '50%',
         // cursor: 'pointer',
     },
     logout: {
-        ':hover': {
-            fill: '#000',
-        },
+        // ':hover': {
+        //     fill: '#000',
+        // },
+        borderRadius: '50%',
         cursor: 'pointer',
     }
 });
@@ -76,8 +88,8 @@ const ProfileBarComponent = (props) => {
     return (
         <Row className={css(styles.container)} horizontal="start" vertical="center">
             <div className={css(styles.proPic)}></div>
-            <div className={css(styles.title)}>{props.userInfo.username}</div>
-            <div className={css(styles.frameR)}>{props.userInfo.frameRating}</div>
+            <div className={css(styles.title)}>{props.username}</div>
+            <div className={css(styles.frameR)}>{props.frameRating}</div>
             <div className={css(styles.logoutB)}>
                 <img className={css(styles.logout)} src={lgSVG} onClick={signOut} ></img>
             </div>
@@ -86,8 +98,8 @@ const ProfileBarComponent = (props) => {
 }
 
 ProfileBarComponent.defaultProps = {
-    name: "My Profile",
-    frameR: 100
+    username: "My Profile",
+    frameRating: 100,
 };
 
 export default ProfileBarComponent;

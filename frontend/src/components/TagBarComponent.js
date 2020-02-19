@@ -2,40 +2,87 @@ import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import chroma from 'chroma-js';
 
 const useStyles = makeStyles({
     root: {
-      width: 200,
-      paddingBottom: 10,
+        width: 200,
+        paddingBottom: 10,
     },
 });
 
 const scaryAnimals = [
-  { label: "Alligators", value: 1 },
-  { label: "Crocodiles", value: 2 },
-  { label: "Sharks", value: 3 },
-  { label: "Small crocodiles", value: 4 },
-  { label: "Smallest crocodiles", value: 5 },
-  { label: "Snakes", value: 6 },
+    { label: "Alligators", value: 1 },
+    { label: "Crocodiles", value: 2 },
+    { label: "Sharks", value: 3 },
+    { label: "Small crocodiles", value: 4 },
+    { label: "Smallest crocodiles", value: 5 },
+    { label: "Snakes", value: 6 },
 ];
 
 const TagBarComponent = (props) => {
     const classes = useStyles();
 
     const handleChange = (newValue, actionMeta) => {
-        console.group('Value Changed');
-        console.log(newValue);
-        console.log(`action: ${actionMeta.action}`);
-        console.groupEnd();
+        // console.group('Value Changed');
+        // console.log(newValue);
+        // console.log(`action: ${actionMeta.action}`);
+        // console.groupEnd();
+    };
+
+    const colourStyles = {
+        // container: (styles, state) => ({
+        //     ...styles,
+        //     backgroundColor: '#FFF',
+        //     // border: '2px solid #ff596a',
+        //     border: state.isSelected && '2px solid black',
+        //     // color: state.isSelected ? 'white' : 'black',
+        // }),
+        control: (styles, state) => ({
+            ...styles,
+            backgroundColor: '#FFF',
+            border: '2px solid #ff596a',
+        }),
+        multiValue: styles => {
+            const color = chroma('#ff596a');
+            return {
+                ...styles,
+                backgroundColor: color.alpha(0.1).css(),
+            };
+        },
+        multiValueLabel: styles => ({
+            ...styles,
+            color: '#ff596a',
+        }),
+        multiValueRemove: styles => ({
+            ...styles,
+            color: '#ff596a',
+            ':hover': {
+                backgroundColor: '#ff596a',
+                color: 'white',
+            },
+        }),
+        clearIndicator: styles => ({
+            ...styles,
+            color: '#ff596a',
+        }),
+        dropdownIndicator: styles => ({
+            ...styles,
+            color: '#ff596a',
+        }),
+        placeholder: styles => ({
+            ...styles,
+            color: '#ff596a',
+        }),
     };
 
     return (
         <div className={classes.root}>
             <div className="container">
-            <Typography align='center'>
-                {props.label}
-            </Typography>
-                <CreatableSelect isMulti onChange={handleChange}/>
+                <Typography align='center'>
+                    {props.label}
+                </Typography>
+                <CreatableSelect isMulti styles={colourStyles} onChange={handleChange} />
             </div>
         </div>
     );
