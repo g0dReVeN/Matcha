@@ -25,7 +25,10 @@ const styles = StyleSheet.create({
     // },
     mainBlock: {
         backgroundColor: '#f5f7fa',
-        padding: 30,
+        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("/assets/background4.jpg")',
+        // backgroundRepeat: 'no-repeat',
+        // backgroundSize: 'cover',
+        // padding: 30,
         width: '100%',
         position: 'relative'
     }

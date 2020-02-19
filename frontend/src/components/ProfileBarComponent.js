@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
-import lgSVG from '../icons/logout.svg';
 
 const styles = StyleSheet.create({
     container: {
@@ -91,7 +90,7 @@ const ProfileBarComponent = (props) => {
             <div className={css(styles.title)}>{props.username}</div>
             <div className={css(styles.frameR)}>{props.frameRating}</div>
             <div className={css(styles.logoutB)}>
-                <img className={css(styles.logout)} src={lgSVG} onClick={signOut} ></img>
+                <img className={css(styles.logout)} src="/assets/logout.svg" onClick={signOut} ></img>
             </div>
         </Row>
     );

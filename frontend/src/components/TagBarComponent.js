@@ -2,7 +2,6 @@ import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import chroma from 'chroma-js';
 
 const useStyles = makeStyles({
     root: {
@@ -44,10 +43,9 @@ const TagBarComponent = (props) => {
             border: '2px solid #ff596a',
         }),
         multiValue: styles => {
-            const color = chroma('#ff596a');
             return {
                 ...styles,
-                backgroundColor: color.alpha(0.1).css(),
+                backgroundColor: 'rgba(254,88,107,0.10)', 
             };
         },
         multiValueLabel: styles => ({
@@ -79,7 +77,7 @@ const TagBarComponent = (props) => {
     return (
         <div className={classes.root}>
             <div className="container">
-                <Typography align='center'>
+                <Typography style={{ color: '#ff596a', fontWeight: 'bolder' }} align='center'>
                     {props.label}
                 </Typography>
                 <CreatableSelect isMulti styles={colourStyles} onChange={handleChange} />

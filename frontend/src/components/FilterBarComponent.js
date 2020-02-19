@@ -64,7 +64,7 @@ const FilterBarComponent = (props) => {
 
   return (
     <div style={{ padding: props.space }}>
-        <Typography id="range-slider" align='center'>
+        <Typography style={{ color: '#ff596a', fontWeight: 'bolder' }} id="range-slider" align='center'>
             {props.label}
         </Typography>
         <CustomSlider

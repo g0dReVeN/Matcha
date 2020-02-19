@@ -2,7 +2,6 @@ import React from 'react';
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
-import logo from '../icons/logo.png';
 
 const styles = StyleSheet.create({
     container: {
@@ -12,32 +11,32 @@ const styles = StyleSheet.create({
         // top: 0,
         width: '100%',
         marginBottom: 50,
-        // marginTop: 50,
+        marginTop: 30,
         // textAlign: 'center',
-        display: 'flex',
+        // display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    title: {
-        fontFamily: 'Arial',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 24,
-        lineHeight: '30px',
-        letterSpacing: 0.3,
-        display: 'table',
-        margin: 'auto',
-        '@media (max-width: 468px)': {
-            fontSize: 20
-        }
-    },
-    iconStyles: {
-        cursor: 'pointer',
-        marginLeft: 25,
-        '@media (max-width: 768px)': {
-            marginLeft: 12
-        }
-    }
+    // title: {
+    //     fontFamily: 'Arial',
+    //     fontStyle: 'normal',
+    //     fontWeight: 'bold',
+    //     fontSize: 24,
+    //     lineHeight: '30px',
+    //     letterSpacing: 0.3,
+    //     display: 'table',
+    //     margin: 'auto',
+    //     '@media (max-width: 468px)': {
+    //         fontSize: 20
+    //     }
+    // },
+    // iconStyles: {
+    //     cursor: 'pointer',
+    //     marginLeft: 25,
+    //     '@media (max-width: 768px)': {
+    //         marginLeft: 12
+    //     }
+    // }
 });
 
 const HeaderComponent = (props) => {
@@ -45,7 +44,7 @@ const HeaderComponent = (props) => {
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between">
             {/* <span className={css(styles.title)}>Matcha</span> */}
-            <img src={logo}/>
+            <img src="assets/logo.png"/>
         </Row>
     );
 };
