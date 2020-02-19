@@ -16,8 +16,24 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 const useStyles = makeStyles({
     root: {
         width: '100%',
-        // backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
-        // backgroundSize: 'cover',
+        color: '#ff596a',
+        '& label': {
+            color: '#ff596a',
+            '&.Mui-focused': {
+                color: '#ff596a',
+            },
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#ff596a',
+            },
+            '&:hover fieldset': {
+                border: '5px solid #ff596a'
+            },
+            '&.Mui-focused fieldset': {
+                border: '5px solid #ff596a'
+            },
+        },
     },
     form: {
         marginTop: 70,
@@ -25,6 +41,8 @@ const useStyles = makeStyles({
     field: {
         width: 300,
         margin: '35px 0px 0px 0px',
+        backgroundColor: '#FFF',
+        color: '#ff596a',
     },
     btn: {
         width: 300,
@@ -32,9 +50,14 @@ const useStyles = makeStyles({
         fontSize: 18,
         fontWeight: 'bold',
         margin: '20px 0px 0px 0px',
+        color: '#FFF',
+        backgroundColor: '#ff596a',
+        '&:hover': {
+            backgroundColor: 'rgba(255,89,106, 0.9) ',
+        },
     },
     text: {
-        color: 'grey',
+        color: '#ff596a',
     },
 });
 
@@ -108,6 +131,7 @@ const RegisterComponent = (props) => {
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
                                         edge="end"
+                                        style={{ color: '#ff596a' }}
                                     >
                                         {values.showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
@@ -116,7 +140,7 @@ const RegisterComponent = (props) => {
                             labelWidth={70}
                         />
                     </FormControl>
-                    <Button className={classes.btn} variant="outlined" onClick={registerUser}>Register</Button>
+                    <Button className={classes.btn} variant="contained" onClick={registerUser}>Register</Button>
                     <Link className={classes.text} href="#" onClick={loginScreen} variant="body2">
                         {'Login Instead?'}
                     </Link>

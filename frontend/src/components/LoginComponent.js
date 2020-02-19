@@ -15,10 +15,25 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles({
     root: {
-        // height: '100%',
         width: '100%',
-        // backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
-        // backgroundSize: '100% 1500px',
+        color: '#ff596a',
+        '& label': {
+            color: '#ff596a',
+            '&.Mui-focused': {
+                color: '#ff596a',
+            },
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#ff596a',
+            },
+            '&:hover fieldset': {
+                border: '5px solid #ff596a'
+            },
+            '&.Mui-focused fieldset': {
+                border: '5px solid #ff596a'
+            },
+        },
     },
     form: {
         marginTop: 70,
@@ -26,6 +41,8 @@ const useStyles = makeStyles({
     field: {
         width: 300,
         margin: '35px 0px 0px 0px',
+        backgroundColor: '#FFF',
+        color: '#ff596a',
     },
     btn: {
         width: 300,
@@ -33,9 +50,14 @@ const useStyles = makeStyles({
         fontSize: 18,
         fontWeight: 'bold',
         margin: '20px 0px 0px 0px',
+        color: '#FFF',
+        backgroundColor: '#ff596a',
+        '&:hover': {
+            backgroundColor: 'rgba(255,89,106, 0.9) ',
+        },
     },
     text: {
-        color: 'grey',
+        color: '#ff596a',
     },
 });
 
@@ -103,6 +125,7 @@ const LoginComponent = (props) => {
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
                                         edge="end"
+                                        style={{ color: '#ff596a' }}
                                     >
                                         {values.showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
@@ -114,8 +137,8 @@ const LoginComponent = (props) => {
                     <Link className={classes.text} href="#" onClick={preventDefault} variant="body2">
                         {'Forgot Password?'}
                     </Link>
-                    <Button className={classes.btn} onClick={loginUser}  variant="outlined">Login</Button>
-                    <Button className={classes.btn} onClick={registerScreen} variant="outlined">Register</Button>
+                    <Button className={classes.btn} onClick={loginUser} variant="contained">Login</Button>
+                    <Button className={classes.btn} onClick={registerScreen} variant="contained">Register</Button>
                 </Column>
             </form>
         </Column>
