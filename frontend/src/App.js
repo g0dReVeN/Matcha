@@ -9,6 +9,7 @@ import FooterComponent from './components/FooterComponent';
 import MainContentComponent from './components/MainContentComponent';
 import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
+import ForgotPasswordComponent from './components/ForgotPasswordComponent';
 import './App.css';
 
 const styles = StyleSheet.create({
@@ -40,6 +41,7 @@ class App extends React.Component {
         this.state = {
             isLoggedIn: false,
             register: false,
+            forgotPassword: false,
             userInfo: {},
         };
     }
@@ -90,6 +92,10 @@ class App extends React.Component {
         this.setState({ register: value });
     };
 
+    resetPassword = value => {
+        this.setState({ forgotPassword: value });
+    };
+
     logOut = value => {
         this.setState({ isLoggedIn: value });
     };
@@ -105,9 +111,9 @@ class App extends React.Component {
     render() {
         if (this.state.isLoggedIn)
             return (
-                <Row className={css(styles.container1)}>
-                    <SideBarComponent userInfo={this.state.userInfo} logOut={this.logOut} />
-                    <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
+                <Row className={ css(styles.container1) }>
+                    <SideBarComponent userInfo={ this.state.userInfo } logOut={this.logOut} />
+                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
                         <HeaderComponent />
                         <MainContentComponent />
                         <FooterComponent />
@@ -116,10 +122,20 @@ class App extends React.Component {
             );
         else if (this.state.register)
             return (
-                <Row className={css(styles.container1)}>
-                    <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
+                <Row className={ css(styles.container1) }>
+                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
                         <HeaderComponent />
-                        <RegisterComponent registerScreen={this.registerScreen} />
+                        <RegisterComponent registerScreen={ this.registerScreen } />
+                        <FooterComponent />
+                    </Column>
+                </Row>
+            );
+        else if (this.state.forgotPassword)
+            return (
+                <Row className={ css(styles.container1) }>
+                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
+                        <HeaderComponent />
+                        <ForgotPasswordComponent resetPassword={ this.resetPassword } />
                         <FooterComponent />
                     </Column>
                 </Row>
@@ -127,9 +143,9 @@ class App extends React.Component {
         else
             return (
                 <Row className={css(styles.container1)}>
-                    <Column className={css(styles.mainBlock)} vertical="flex-start" horizontal="center">
+                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
                         <HeaderComponent />
-                        <LoginComponent mainContent={this.mainContent} registerScreen={this.registerScreen} />
+                        <LoginComponent mainContent= {this.mainContent } registerScreen={ this.registerScreen } resetPassword={ this.resetPassword } />
                         <FooterComponent />
                     </Column>
                 </Row>

@@ -90,6 +90,11 @@ const LoginComponent = (props) => {
         props.registerScreen(true);
     };
 
+    const resetPassword = event => {
+        event.preventDefault();
+        props.resetPassword(true);
+    };
+
     const loginUser = event => {
         event.preventDefault();
 
@@ -134,7 +139,7 @@ const LoginComponent = (props) => {
                             labelWidth={70}
                         />
                     </FormControl>
-                    <Link className={classes.text} href="#" onClick={preventDefault} variant="body2">
+                    <Link className={classes.text} href="#" onClick={resetPassword} variant="body2">
                         {'Forgot Password?'}
                     </Link>
                     <Button className={classes.btn} onClick={loginUser} variant="contained">Login</Button>
