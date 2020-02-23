@@ -4,8 +4,14 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Column } from 'simple-flexbox';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles({
     root: {
@@ -77,10 +83,14 @@ const ForgotPasswordComponent = (props) => {
     //     textInput.focus();
     // });
 
-    const [values, setValues] = React.useState({ username: '', resMsg: '' , color: 'red' });
+    const [values, setValues] = React.useState({ password: '', resMsg: '' , color: 'red' });
 
     const handleChange = value => event => {
         setValues({ ...values, [value]: event.target.value });
+	};
+
+	const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
     };
 	
 	const loginScreen = event => {
@@ -88,19 +98,19 @@ const ForgotPasswordComponent = (props) => {
         props.resetPassword(false);
     };
 
-    const forgotPassword = event => {
+    const resetPassword = event => {
         event.preventDefault();
 
-        if (values.username) {
-            // axios.post('http://localhost:5000' + '/forgotPassword', { username: values.username })
+        if (values.password) {
+            // axios.post('http://localhost:5000' + '/resetPassword', { password: values.password })
             //     .then(res => {
             //         if (res.status === 200)
-            //             setValues({ color: 'green', resMsg: res.msg });
+            //             props.resetPassword(false);
             //         else
             //             setValues({ color: 'red', resMsg: res.msg });
             //     });
             setValues({ color: 'green', resMsg: 'jou ma se poes' });
-            document.getElementById("usernameField").focus();
+            document.getElementById("outlined-adornment-password").focus();
             
         }
 
@@ -111,20 +121,33 @@ const ForgotPasswordComponent = (props) => {
 			<form className={classes.form} noValidate autoComplete="off">
                 <Column vertical="center" horizontal="center">
                     <Typography className={classes.msg} style={{ color: values.color }} >{ values.resMsg }</Typography>
-					<TextField
-                        id="usernameField"
-						required 
-						className={classes.field} 
-						label="Username for password reset" 
-						variant="outlined" 
-						value={values.username} 
-                        onChange={handleChange('username')}
-                        autoFocus 
-					/>
+					<FormControl required className={classes.field} variant="outlined">
+                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-password"
+                            type={values.showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            onChange={handleChange('password')}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={e => e.preventDefault}
+                                        edge="end"
+                                        style={{ color: '#ff596a' }}
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            labelWidth={70}
+                        />
+                    </FormControl>
 					<Link className={classes.text} href="#" onClick={loginScreen} variant="body2">
 						{'Login Instead?'}
 					</Link>
-					<Button className={classes.btn} onClick={forgotPassword} variant="contained">Reset Password</Button>
+					<Button className={classes.btn} onClick={resetPassword} variant="contained">Reset Password</Button>
 				</Column>
             </form>
         </Column>

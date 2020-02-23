@@ -10,6 +10,7 @@ import MainContentComponent from './components/MainContentComponent';
 import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
 import ForgotPasswordComponent from './components/ForgotPasswordComponent';
+import ResetPasswordComponent from './components/ResetPasswordComponent';
 import './App.css';
 
 const styles = StyleSheet.create({
@@ -27,9 +28,6 @@ const styles = StyleSheet.create({
     mainBlock: {
         backgroundColor: '#FFF',
         backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
-        // backgroundRepeat: 'no-repeat',
-        // backgroundSize: 'cover',
-        // padding: 30,
         width: '100%',
         position: 'relative'
     }
@@ -48,22 +46,6 @@ class App extends React.Component {
 
     componentDidMount() {
         if (localStorage.hasOwnProperty('access_token')) {
-            // this.setState({ isLoadding: -1 });
-            // localStorage.removeItem('access_token');
-            // axios.get('http://localhost:5000', { headers: { 'Authorization': localStorage.access_token } })
-            //     .then(res => {
-            //         localStorage.removeItem('access_token');
-            //         if (res.success === true)
-                        // this.setState({
-                        //     isLoadding: false,
-                        //     isLoggedIn: true,
-                        //     userInfo: jwt.decode(localStorage.access_token, { json: true }),
-                        // });
-            //         else {
-            //             localStorage.clear();
-            //             this.setState({ isLoadding: false });
-            //         }
-            //     });
             jwt.verify(localStorage.access_token, process.env.REACT_APP_JWT_PUBLIC_KEY, { algorithms: ['ES256'] }, (err, payload) => {
                 if (err) {
                     localStorage.clear();
@@ -135,7 +117,7 @@ class App extends React.Component {
                 <Row className={ css(styles.container1) }>
                     <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
                         <HeaderComponent />
-                        <ForgotPasswordComponent resetPassword={ this.resetPassword } />
+                        <ResetPasswordComponent resetPassword={ this.resetPassword } />
                         <FooterComponent />
                     </Column>
                 </Row>
