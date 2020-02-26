@@ -1,13 +1,25 @@
 import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles'
-import { Column } from 'simple-flexbox';
+import { Row, Column } from 'simple-flexbox';
+import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import HeaderComponent from './HeaderComponent';
+import FooterComponent from './FooterComponent';
 
 const useStyles = makeStyles({
+    container: {
+        height: '100%',
+        minHeight: '100vh',
+    },
+    mainBlock: {
+        backgroundColor: '#FFF',
+        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
+        width: '100%',
+        position: 'relative'
+    },
     root: {
         width: '100%',
         color: '#ff596a',
@@ -54,7 +66,15 @@ const useStyles = makeStyles({
     },
     text: {
         color: '#ff596a',
-        // backgroundColor: 'white',
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        fontWeight: '400',
+        textDecorationLine: 'none',
+        fontSize: '0.875rem',
+        lineHeight: '1.43',
+        letterSpacing: '0.01071em',
+        '&:hover': {
+            textDecorationLine: 'underline',
+        },
     },
     msg: {
         width: 300,
@@ -107,27 +127,31 @@ const ForgotPasswordComponent = (props) => {
     };
 
     return (
-        <Column className={classes.root} vertical="center" horizontal="center">
-			<form className={classes.form} noValidate autoComplete="off">
-                <Column vertical="center" horizontal="center">
-                    <Typography className={classes.msg} style={{ color: values.color }} >{ values.resMsg }</Typography>
-					<TextField
-                        id="usernameField"
-						required 
-						className={classes.field} 
-						label="Username for password reset" 
-						variant="outlined" 
-						value={values.username} 
-                        onChange={handleChange('username')}
-                        autoFocus 
-					/>
-					<Link className={classes.text} href="#" onClick={loginScreen} variant="body2">
-						{'Login Instead?'}
-					</Link>
-					<Button className={classes.btn} onClick={forgotPassword} variant="contained">Reset Password</Button>
-				</Column>
-            </form>
-        </Column>
+        <Row className={ classes.container }>
+            <Column className={ classes.mainBlock } vertical="flex-start" horizontal="center">
+                <HeaderComponent />
+                <Column className={classes.root} vertical="center" horizontal="center">
+                    <form className={classes.form} noValidate autoComplete="off">
+                        <Column vertical="center" horizontal="center">
+                            <Typography className={classes.msg} style={{ color: values.color }} >{ values.resMsg }</Typography>
+                            <TextField
+                                id="usernameField"
+                                required 
+                                className={classes.field} 
+                                label="Username for password reset" 
+                                variant="outlined" 
+                                value={values.username} 
+                                onChange={handleChange('username')}
+                                autoFocus 
+                            />
+                            <Link className={classes.text} to="/login">Login Instead?</Link>
+                            <Button className={classes.btn} onClick={forgotPassword} variant="contained">Reset Password</Button>
+                        </Column>
+                    </form>
+                </Column>
+                <FooterComponent />
+            </Column>
+        </Row>
     );
 };
 

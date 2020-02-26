@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { Column, Row } from 'simple-flexbox';
@@ -11,20 +12,14 @@ import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
 import ForgotPasswordComponent from './components/ForgotPasswordComponent';
 import ResetPasswordComponent from './components/ResetPasswordComponent';
+import PageNotFoundComponent from './components/PageNotFoundComponent';
 import './App.css';
 
 const styles = StyleSheet.create({
-    container1: {
+    container: {
         height: '100%',
         minHeight: '100vh',
     },
-    container2: {
-        height: '100%',
-        width: '100%',
-    },
-    // content: {
-    //     marginTop: 54
-    // },
     mainBlock: {
         backgroundColor: '#FFF',
         backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
@@ -33,13 +28,13 @@ const styles = StyleSheet.create({
     }
 });
 
-class App extends React.Component {
+export default class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            isLoggedIn: false,
-            register: false,
-            forgotPassword: false,
+            // isLoggedIn: false,
+            // register: false,
+            // forgotPassword: false,
             userInfo: {},
         };
     }
@@ -53,7 +48,7 @@ class App extends React.Component {
                 }
                 else
                     this.setState({
-                        isLoggedIn: true,
+                        // isLoggedIn: true,
                         userInfo: payload,
                     });
             });
@@ -70,69 +65,63 @@ class App extends React.Component {
 
     // resize = () => this.forceUpdate();
 
-    registerScreen = value => {
-        this.setState({ register: value });
-    };
+    // registerScreen = value => {
+    //     this.setState({ register: value });
+    // };
 
-    resetPassword = value => {
-        this.setState({ forgotPassword: value });
-    };
+    // resetPassword = value => {
+    //     this.setState({ forgotPassword: value });
+    // };
 
-    logOut = value => {
-        this.setState({ isLoggedIn: value });
-    };
+    // logOut = value => {
+    //     this.setState({ isLoggedIn: value });
+    // };
 
-    mainContent = token => {
-        localStorage.access_token = token;
-        this.setState({
-            isLoggedIn: true,
-            userInfo: jwt.verify(localStorage.access_token, process.env.REACT_APP_JWT_PUBLIC_KEY, { algorithms: ['ES256'] }),
-        });
-    };
+    // mainContent = token => {
+    //     localStorage.access_token = token;
+    //     this.setState({
+    //         isLoggedIn: true,
+    //         userInfo: jwt.verify(localStorage.access_token, process.env.REACT_APP_JWT_PUBLIC_KEY, { algorithms: ['ES256'] }),
+    //     });
+    // };
 
     render() {
-        if (this.state.isLoggedIn)
-            return (
-                <Row className={ css(styles.container1) }>
-                    <SideBarComponent userInfo={ this.state.userInfo } logOut={this.logOut} />
-                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
-                        <HeaderComponent />
-                        <MainContentComponent />
-                        <FooterComponent />
-                    </Column>
-                </Row>
-            );
-        else if (this.state.register)
-            return (
-                <Row className={ css(styles.container1) }>
-                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
-                        <HeaderComponent />
-                        <RegisterComponent registerScreen={ this.registerScreen } />
-                        <FooterComponent />
-                    </Column>
-                </Row>
-            );
-        else if (this.state.forgotPassword)
-            return (
-                <Row className={ css(styles.container1) }>
-                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
-                        <HeaderComponent />
-                        <ResetPasswordComponent resetPassword={ this.resetPassword } />
-                        <FooterComponent />
-                    </Column>
-                </Row>
-            );
-        else
-            return (
-                <Row className={css(styles.container1)}>
-                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
-                        <HeaderComponent />
-                        <LoginComponent mainContent= {this.mainContent } registerScreen={ this.registerScreen } resetPassword={ this.resetPassword } />
-                        <FooterComponent />
-                    </Column>
-                </Row>
-            );
-    }
-}
-
-export default App;
+        return (
+            <Router>
+                <Switch>
+                    <Route 
+                        exact path="/"
+                        render={ () => { return (
+                                <Row className={ css(styles.container) }>
+                                    <SideBarComponent userInfo={ this.state.userInfo } />
+                                    <Column className={ css(styles.mainBlock) } vertical="flex-start" horizontal="center">
+                                        <HeaderComponent />
+                                        <MainContentComponent />
+                                        <FooterComponent />
+                                    </Column>
+                                </Row>
+                            )}
+                        }
+                    />
+                    <Route exact path="/login">
+                        <LoginComponent />
+                    </Route>
+                    <Route exact path="/register">
+                        <RegisterComponent />
+                    </Route>
+                    <Route exact path="/forgotPassword">
+                        <ForgotPasswordComponent />
+                    </Route>
+                    <Route 
+                        exact path="/resetPassword/:resetToken" 
+                        render={ (props) => <ResetPasswordComponent {...props} /> }
+                    />
+                    <Route
+                        path="*"
+                        render={ () => <PageNotFoundComponent/> }
+                    />
+                </Switch>
+            </Router>
+        );
+    };
+};

@@ -43,8 +43,7 @@ const HeaderComponent = (props) => {
     // const { icon, title, ...otherProps } = props;
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between">
-            {/* <span className={css(styles.title)}>Matcha</span> */}
-            <img src="assets/logo.png"/>
+            <img src="/assets/logo.png"/>
         </Row>
     );
 };

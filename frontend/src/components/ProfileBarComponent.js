@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
+import { Link } from "react-router-dom";
 
 const styles = StyleSheet.create({
     container: {
@@ -77,21 +78,16 @@ const styles = StyleSheet.create({
 });
 
 const ProfileBarComponent = (props) => {
-    const signOut = event => {
-        event.preventDefault();
-
-        localStorage.removeItem('access_token');
-        props.logOut(false);
-    };
+    const signOut = (event) => { localStorage.removeItem('access_token'); };
 
     return (
         <Row className={css(styles.container)} horizontal="start" vertical="center">
             <div className={css(styles.proPic)}></div>
             <div className={css(styles.title)}>{props.username}</div>
             <div className={css(styles.frameR)}>{props.frameRating}</div>
-            <div className={css(styles.logoutB)}>
+            <Link className={css(styles.logoutB)} to="/login">
                 <img className={css(styles.logout)} src="/assets/logout.svg" onClick={signOut} ></img>
-            </div>
+            </Link>
         </Row>
     );
 }

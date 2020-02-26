@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles'
-import { Column } from 'simple-flexbox';
+import { Row, Column } from 'simple-flexbox';
+import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,8 +12,20 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import HeaderComponent from './HeaderComponent';
+import FooterComponent from './FooterComponent';
 
 const useStyles = makeStyles({
+    container: {
+        height: '100%',
+        minHeight: '100vh',
+    },
+    mainBlock: {
+        backgroundColor: '#FFF',
+        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url("/assets/background4.jpg")',
+        width: '100%',
+        position: 'relative'
+    },
     root: {
         width: '100%',
         color: '#ff596a',
@@ -58,6 +70,15 @@ const useStyles = makeStyles({
     },
     text: {
         color: '#ff596a',
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        fontWeight: '400',
+        textDecorationLine: 'none',
+        fontSize: '0.875rem',
+        lineHeight: '1.43',
+        letterSpacing: '0.01071em',
+        '&:hover': {
+            textDecorationLine: 'underline',
+        },
     },
 });
 
@@ -85,10 +106,10 @@ const RegisterComponent = (props) => {
         event.preventDefault();
     };
 
-    const loginScreen = event => {
-        event.preventDefault();
-        props.registerScreen(false);
-    };
+    // const loginScreen = event => {
+    //     event.preventDefault();
+    //     props.registerScreen(false);
+    // };
 
     const registerUser = event => {
         event.preventDefault();
@@ -110,43 +131,47 @@ const RegisterComponent = (props) => {
     };
 
     return (
-        <Column className={classes.root} vertical="center" horizontal="center">
-            <form className={classes.form} noValidate autoComplete="off">
-                <Column vertical="center" horizontal="center">
-                    <TextField required className={classes.field} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
-                    <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
-                    <TextField required className={classes.field} label="Surname" variant="outlined" value={values.lastname} onChange={handleChange('lastname')}/>
-                    <TextField required className={classes.field} label="First Name" variant="outlined" value={values.firstname} onChange={handleChange('firstname')}/>
-                    <FormControl required className={classes.field} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={values.showPassword ? 'text' : 'password'}
-                            value={values.password}
-                            onChange={handleChange('password')}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                        style={{ color: '#ff596a' }}
-                                    >
-                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            labelWidth={70}
-                        />
-                    </FormControl>
-                    <Button className={classes.btn} variant="contained" onClick={registerUser}>Register</Button>
-                    <Link className={classes.text} href="#" onClick={loginScreen} variant="body2">
-                        {'Login Instead?'}
-                    </Link>
+        <Row className={ classes.container }>
+            <Column className={ classes.mainBlock } vertical="flex-start" horizontal="center">
+                <HeaderComponent />
+                <Column className={classes.root} vertical="center" horizontal="center">
+                    <form className={classes.form} noValidate autoComplete="off">
+                        <Column vertical="center" horizontal="center">
+                            <TextField required className={classes.field} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
+                            <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
+                            <TextField required className={classes.field} label="Surname" variant="outlined" value={values.lastname} onChange={handleChange('lastname')}/>
+                            <TextField required className={classes.field} label="First Name" variant="outlined" value={values.firstname} onChange={handleChange('firstname')}/>
+                            <FormControl required className={classes.field} variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-password"
+                                    type={values.showPassword ? 'text' : 'password'}
+                                    value={values.password}
+                                    onChange={handleChange('password')}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                edge="end"
+                                                style={{ color: '#ff596a' }}
+                                            >
+                                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    labelWidth={70}
+                                />
+                            </FormControl>
+                            <Button className={classes.btn} variant="contained" onClick={registerUser}>Register</Button>
+                            <Link className={classes.text} to="/login">Login Instead?</Link>
+                        </Column>
+                    </form>
                 </Column>
-            </form>
-        </Column>
+                <FooterComponent />
+            </Column>
+        </Row>
     );
 };
 
