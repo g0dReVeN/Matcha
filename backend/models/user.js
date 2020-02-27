@@ -28,7 +28,7 @@ const userSchema = new Schema({
     fameRating: {
         type: Number,
         default: '0',
-        min: -100,
+        min: 0,
         max: 100
     },
     gender: Boolean,

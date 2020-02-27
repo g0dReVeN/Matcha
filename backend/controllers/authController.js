@@ -89,7 +89,8 @@ exports.postRegistration = (req, res, next) => {
 //                   lastname: lastname,
 //                   email: email,
 //                   password: hashedPassword,
-//                   activeStatus: true
+//                   activeStatus: true,
+//                   fameRating: Math.floor(Math.random() * 101)
 //                 });
 //                 user.save()
 //                 .then(newUser => {
