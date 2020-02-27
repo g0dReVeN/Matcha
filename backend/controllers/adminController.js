@@ -4,71 +4,65 @@ const Tags = require('../models/tags');
 const UserImages = require('../models/images');
 
 exports.postProfile = (req, res, next) => {
-    // const age = req.body.age;
-    // const location = req.body.location;
-    // const gender = req.body.gender;
-    // const sexualPreference = req.body.sexualPreference;
-    // const biography = req.body.biography;
-    // const tags = req.body.tags
+    const age = req.body.age;
+    const location = req.body.location;
+    const gender = req.body.gender;
+    const sexualPreference = req.body.sexualPreference;
+    const biography = req.body.biography;
+    const tags = req.body.tags
 
-    // User.findById(req.session.user.id)
-    //     .then(user => {
-
-    //         user.age = age;
-    //         user.location = 
-    //         user.gender = gender;
-    //         user.sexualPreference = sexualPreference;
-    //         user.biography = biography;
-
-    //         user.completedProfile = true;
-    //         user.save(err => {
-    //             if (err) {
-    //                 return res.status(400).json({ msg: 'Error', err });
-    //             }
-    //             const newTags = new Tags({
-    //                 userId: req.user._id,
-    //                 tags: tags
-    //             });
-    //             newTags.save(err => {
-    //                 if (err) {
-    //                     return res.status(400).json({ success: false, msg: 'Error', err });
-    //                 }
-    //                 return res.status(200).json({ success: true, msg: 'User profile updated!' });
-    //             });
-    //         });
-    //     })
-    //     .catch(err => {
-    //         return res.status(400).json({ success: false, msg: 'Error', err });
-    //     });
+    User.findById(req.session.user.id)
+        .then(user => {
+            user.age = age;
+            user.location = location;
+            user.gender = gender;
+            user.sexualPreference = sexualPreference;
+            user.biography = biography;
+            user.completedProfile = true;
+            user.save(err => {
+                if (err)
+                    return res.status(500).json({ msg: 'Internal server error', err });
+                const newTags = new Tags({
+                    userId: req.user._id,
+                    tags: tags
+                });
+                newTags.save(err => {
+                    if (err)
+                        return res.status(500).json({ success: false, msg: 'Internal server error', err });
+                    return res.status(200).json({ success: true, msg: 'User profile updated' });
+                });
+            });
+        })
+        .catch(err => {
+            return res.status(500).json({ success: false, msg: 'Internal server error', err });
+        });
 }
 
-exports.getUserObject = (req, res, next) => {
+exports.getFilteredUsers = (req, res, next) => {
     let profileImage = null;
     UserImages.findOne({ userId: req.user._id })
-    .then(images => {
-        if (images)
-            profileImage = images.profileImage;
-    })
-    .catch(err => {
-        return res.status(400).json({ success: false, msg: 'Error', err });
-    })
-    return res.status(200).json({
-        success: false,
-        msg: 'Successfully got user details.',
-        userObj: {
-            "username": req.user.username,
-            "firstname": req.user.firstname,
-            "lastname": req.user.lastname,
-            "email": req.user.email,
-            "age": req.user.age,
-            "location": req.user.location,
-            "fameRating": req.user.fameRating,
-            "gender": req.user.gender,
-            "sexualPreference": req.user.sexualPreference,
-            "biography": req.user.biography,
-            "profileImage": profileImage
-        }
-    });
+        .then(images => {
+            if (images)
+                profileImage = images.profileImage;
+            return res.status(200).json({
+                success: false,
+                msg: 'Successfully retrieved users',
+                userObj: {
+                    "username": req.user.username,
+                    "firstname": req.user.firstname,
+                    "lastname": req.user.lastname,
+                    "age": req.user.age,
+                    "location": req.user.location,
+                    "fameRating": req.user.fameRating,
+                    "gender": req.user.gender,
+                    "biography": req.user.biography,
+                    "profileImage": profileImage
+                }
+            });
+        })
+        .catch(err => {
+            return res.status(500).json({ success: false, msg: 'Internal server error', err });
+        });
 }
 
 exports.postHistory = (req, res, next) => {
@@ -98,7 +92,7 @@ exports.postHistory = (req, res, next) => {
             });
         })
         .catch(err => {
-            return res.status(400).json({ success: false, msg: 'Error', err });
+            return res.status(400).json({ success: false, msg: 'Internal server error', err });
         });
 }
 
@@ -106,7 +100,7 @@ exports.postUserImages = (req, res, next) => {
     if (!req.body && !req.files)
         return res.status(400).json({ success: false, msg: "Error uploading images" });
     UserImages
-        .findOne({ "userId": /** req.user._id */ "5e49a3b53d51224d3f729b1c"  })
+        .findOne({ "userId": /** req.user._id */ "5e49a3b53d51224d3f729b1c" })
         .then(userImages => {
             if (!userImages) {
                 userImages = new UserImages({
@@ -149,7 +143,7 @@ exports.getUserImages = (req, res, next) => {
                         profileImage: profileImage
                     });
                 })
-                .catch(err => { return res.status(400).json({ success: false, msg: 'Error', err }); });
+                .catch(err => { return res.status(400).json({ success: false, msg: 'Internal server error', err }); });
         })
-        .catch(err => { return res.status(400).json({ success: false, msg: 'Error', err }); });
+        .catch(err => { return res.status(400).json({ success: false, msg: 'Internal server error', err }); });
 }

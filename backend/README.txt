@@ -181,4 +181,30 @@ RESPONSE	-	SUCCESSFUL
 
 >>USER ENDPOINTS<<
 
-Pending...
+Update profile:
+URL			-	http://localhost:5000/user/profile
+METHOD		-	POST
+BODY		-	{
+					age: Number,
+					location: {
+						lat: Number,
+						long, Number
+					}
+				},
+				gender: Boolean,
+				sexualPreference: Number (0: bisexual, 1: male, 2: female),
+				biography: String,
+				tags: [String]
+RESPONSE	-	SUCCESSFUL
+				http code 200
+				{
+					success: true,
+					msg: "User profile updated"
+				}
+			-	UNSUCCESSFUL
+				http code 500
+				{
+					success: false,
+					msg: "Internal server error",
+					{err}
+				}

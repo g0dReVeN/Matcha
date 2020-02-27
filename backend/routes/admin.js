@@ -6,7 +6,7 @@ const imgUpload = require('../middleware/multer');
 
 const router = express.Router();
 
-router.get('/userInfo', isAuth , adminController.getUserObject);
+router.get('/users', isAuth , adminController.getFilteredUsers);
 
 router.post('/profile', isAuth , adminController.postProfile);
 

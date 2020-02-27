@@ -24,7 +24,10 @@ const userSchema = new Schema({
         required: true
     },
     age: Number,
-    location: Array,
+    location: {
+        lat: Number,
+        long: Number
+    },
     fameRating: {
         type: Number,
         default: '0',
