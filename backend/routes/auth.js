@@ -12,7 +12,7 @@ router.post('/changePassword', authController.postChangePassword);
 
 router.post('/validateResetToken', authController.postValidateResetToken);
 
-router.get('/', isAuth, (req, res, next) => { return res.status(200).json({ success: true, msg: 'Token valid' }) });
+router.get('/', isAuth, (req, res) => { return res.status(200).json({ success: true, msg: 'Token valid' }) });
 
 router.post('/confirm', authController.getUserConfirmation);
 

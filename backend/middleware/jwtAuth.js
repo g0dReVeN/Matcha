@@ -10,7 +10,7 @@ exports.signToken = (user) => {
     delete userData.password;
     jwt.sign(userData, jwt_private_key, {
       algorithm: 'ES256',
-      expiresIn: 60 * 60
+      expiresIn: 60 * 60,
     }, (err, newToken) => {
       if (err) {
         console.log(`Error creating token: ${err}`);

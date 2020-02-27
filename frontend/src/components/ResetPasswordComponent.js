@@ -2,14 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles'
 import { Row, Column } from 'simple-flexbox';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import HeaderComponent from './HeaderComponent';
@@ -49,12 +49,14 @@ const useStyles = makeStyles({
     },
     form: {
         marginTop: 70,
+        width: 300,
     },
     field: {
         width: 300,
         margin: '35px 0px 0px 0px',
         backgroundColor: '#FFF',
         color: '#ff596a',
+        marginTop: 0,
     },
     btn: {
         width: 300,
@@ -80,54 +82,60 @@ const useStyles = makeStyles({
             textDecorationLine: 'underline',
         },
     },
+    msg: {
+        width: 300,
+        // height: 80,
+        fontSize: 16,
+        // backgroundColor: 'white',
+        // wordWrap: 'break-word',
+        // color: values.color,
+    },
 });
 
-const RegisterComponent = (props) => {
+export default (props) => {
+    // const { icon, title, ...otherProps } = props;
+    // console.log('match', props);
+    if (!props.fetchInitialData(props.match.params.resetToken))
+        return (
+            <Redirect to="/404" />
+        )
+
+    console.log('match', props);
     const classes = useStyles();
 
-    const [values, setValues] = React.useState({
-        username: '',
-        firstname: '',
-        lastname: '',
-        email: '',
-        password: '',
-        showPassword: false,
-    });
+    // const preventDefault = event => event.preventDefault();
+
+    // let textInput = null;
+    // React.useEffect(()=>{
+    //     textInput.focus();
+    // });
+
+    const [values, setValues] = React.useState({ password: '', resMsg: '' , color: 'red' });
 
     const handleChange = value => event => {
         setValues({ ...values, [value]: event.target.value });
-    };
+	};
 
-    const handleClickShowPassword = () => {
+	const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
 
-    const handleMouseDownPassword = event => {
+    const resetPassword = event => {
         event.preventDefault();
-    };
 
-    // const loginScreen = event => {
-    //     event.preventDefault();
-    //     props.registerScreen(false);
-    // };
+        if (values.password) {
+            // axios.post('http://localhost:5000' + '/resetPassword', { password: values.password })
+            //     .then(res => {
+            //         if (res.status === 200)
+            //             props.resetPassword(false);
+            //         else
+            //             setValues({ color: 'red', resMsg: res.msg });
+            //     });
+            setValues({ color: 'green', resMsg: 'jou ma se poes' });
+            document.getElementById("outlined-adornment-password").focus();
+            
+        }
 
-    const registerUser = event => {
-        event.preventDefault();
-        
-        const userInfo = {
-            username: values.username,
-            firstname: values.firstname,
-            lastname: values.lastname,
-            email: values.email,
-            password: values.password,
-        };
-
-        axios.post('http://localhost:5000/register', userInfo)
-            .then(res => {
-                console.log(res.data);
-                if (res.status === 200)
-                    props.registerScreen(false);
-            });
     };
 
     return (
@@ -137,10 +145,7 @@ const RegisterComponent = (props) => {
                 <Column className={classes.root} vertical="center" horizontal="center">
                     <form className={classes.form} noValidate autoComplete="off">
                         <Column vertical="center" horizontal="center">
-                            <TextField required className={classes.field} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
-                            <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
-                            <TextField required className={classes.field} label="Surname" variant="outlined" value={values.lastname} onChange={handleChange('lastname')}/>
-                            <TextField required className={classes.field} label="First Name" variant="outlined" value={values.firstname} onChange={handleChange('firstname')}/>
+                            <Typography className={classes.msg} style={{ color: values.color }} >{ values.resMsg }</Typography>
                             <FormControl required className={classes.field} variant="outlined">
                                 <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                                 <OutlinedInput
@@ -153,7 +158,7 @@ const RegisterComponent = (props) => {
                                             <IconButton
                                                 aria-label="toggle password visibility"
                                                 onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
+                                                onMouseDown={e => e.preventDefault}
                                                 edge="end"
                                                 style={{ color: '#ff596a' }}
                                             >
@@ -165,7 +170,7 @@ const RegisterComponent = (props) => {
                                 />
                             </FormControl>
                             <Link className={classes.text} to="/login">Login Instead?</Link>
-                            <Button className={classes.btn} variant="contained" onClick={registerUser}>Register</Button>
+                            <Button className={classes.btn} onClick={resetPassword} variant="contained">Reset Password</Button>
                         </Column>
                     </form>
                 </Column>
@@ -174,5 +179,3 @@ const RegisterComponent = (props) => {
         </Row>
     );
 };
-
-export default RegisterComponent;

@@ -26,7 +26,7 @@ const SideBarComponent = (props) => {
         <div style={{ position: 'relative' }}>
             <Row className={css(styles.mainContainer)} breakpoints={{ 768: css(styles.mainContainerMobile, styles.mainContainerExpanded) }}>
                 <Column className={css(styles.container)} breakpoints={{ 768: css(styles.containerMobile) }}>
-                    <ProfileBarComponent userInfo={props.userInfo} />
+                    <ProfileBarComponent { ...props.userInfo } logOut={ props.logOut } />
                 </Column>
             </Row>
             <Row>

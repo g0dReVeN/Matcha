@@ -102,7 +102,7 @@ const useStyles = makeStyles({
 
 const ProfileCardComponent = (props) => {
   const classes = useStyles();
-  const likeColor = props.likeStatus == 1 ? 'green' : props.likeStatus == 0 ? 'grey' : props.likeStatus == 2 ? 'orange' : '#ff596a';
+  const likeColor = props.likeStatus === 1 ? 'green' : props.likeStatus === 0 ? 'grey' : props.likeStatus === 2 ? 'orange' : '#ff596a';
 
   return (
     <Row vertical="center" horizontal="space-evenly">
@@ -111,7 +111,7 @@ const ProfileCardComponent = (props) => {
       </IconButton>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
-          <img className={classes.proPic} src={props.picSrc}></img>
+          <img className={classes.proPic} src={props.picSrc} alt="Profile"></img>
           <div className={classes.prevPic}>&lt;</div>
           <div className={classes.nextPic}>&gt;</div>
           <div className={classes.likeStatus} style={{ backgroundColor: likeColor }}></div>

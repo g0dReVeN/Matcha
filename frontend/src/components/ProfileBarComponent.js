@@ -1,10 +1,9 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import logOut from '../icons/logout.svg';
-import UserNotifPanelComponent from './UserNotifPanelComponent';
+import { makeStyles } from '@material-ui/core/styles'
+import { Link, useHistory } from "react-router-dom";
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles({
     container: {
         // marginLeft: 32,
         // marginRight: 32,
@@ -16,13 +15,15 @@ const styles = StyleSheet.create({
         left: 10,
         position: 'absolute',
         backgroundColor: '#FFF',
-        border: '1px solid #FFF',
+        // border: '1px solid #FFF',
+        border: '5px double #ff596a',
         borderRadius: '50%',
         height: 40,
-        width:  40
+        width:  40,
+        cursor: 'pointer',
     },
     title: {
-        left: 65,
+        left: 70,
         position: 'absolute',
         fontFamily: 'Arial',
         fontStyle: 'normal',
@@ -31,44 +32,74 @@ const styles = StyleSheet.create({
         lineHeight: '24px',
         letterSpacing: '0.4px',
         color: '#FFF',
+        cursor: 'pointer',
     },
-    frameR: {
-        left: 165,
+    fameR: {
+        right: 60,
         position: 'absolute',
-        textAlign: 'center',
+        backgroundColor: '#FFF',
+        // textAlign: 'center',
+        // textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         color: '#ff596a',
         fontWeight: 'bold',
-        lineHeight: 2.2,
-        borderBottom: '32px solid #FFF',
-        borderLeft: '8px solid transparent',
-        borderRight: '8px solid transparent',
-        height: 0,
-        width: 32,
+        // lineHeight: 2.2,
+        // borderBottom: '32px solid #f5f7fa',
+        // borderLeft: '8px solid transparent',
+        // borderRight: '8px solid transparent',
+        // height: 0,
+        // width: 32,
+        height: 40,
+        width:  40,
+        border: '5px double #ff596a',
+        borderRadius: '50%',
+        // ':hover': {
+        //     borderBottom: '32px solid #FFF',
+        // },
+        // cursor: 'pointer',
     },
     logoutB: {
         position: 'absolute',
         left: 300,
         height: 40,
-        width:  40
+        width:  40,
+        // borderRadius: '50%',
+        // cursor: 'pointer',
+    },
+    logout: {
+        // ':hover': {
+        //     fill: '#000',
+        // },
+        borderRadius: '50%',
+        cursor: 'pointer',
     }
 });
 
-const ProfileBarComponent = (props) => {
+export default function ProfileBarComponent(props) {
+    console.log(props)
+    const classes = useStyles();
+    const history = useHistory();
+
+    const logOut = (event) => { 
+        localStorage.removeItem('access_token');
+        history.push("/login");
+    };
+
     return (
-        <Row className={css(styles.container)} horizontal="start" vertical="center">
-            <div className={css(styles.proPic)}></div>
-            <div className={css(styles.title)}>{props.userInfo.username}</div>
-            <div className={css(styles.frameR)}>{props.userInfo.frameRating}</div>
-            <div className={css(styles.logoutB)}>
-                <img src={logOut}></img>
-            </div>
+        <Row className={ classes.container } horizontal="start" vertical="center">
+            <div className={ classes.proPic }></div>
+            <div className={ classes.title }>{ props.username }</div>
+            <div className={ classes.fameR }>{ props.fameRating }</div>
+            <Link className={ classes.logoutB } to="/login">
+                <img className={ classes.logout } src="/assets/logout.svg" alt="Logout" onClick={ logOut } ></img>
+            </Link>
         </Row>
     );
 }
 
 ProfileBarComponent.defaultProps = {
-    name: "My Profile",
-    frameR: 100
+    username: "My Profile",
+    fameRating: 100,
 };
-
-export default ProfileBarComponent;
