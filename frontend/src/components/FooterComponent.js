@@ -1,5 +1,4 @@
 import React from 'react';
-import { number } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 

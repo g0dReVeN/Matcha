@@ -1,5 +1,4 @@
 import React from 'react';
-import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 
@@ -43,7 +42,7 @@ const HeaderComponent = (props) => {
     // const { icon, title, ...otherProps } = props;
     return (
         <Row className={css(styles.container)} vertical="center" horizontal="space-between">
-            <img src="/assets/logo.png"/>
+            <img src="/assets/logo.png" alt="Logo" />
         </Row>
     );
 };

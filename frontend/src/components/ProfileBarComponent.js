@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import { Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles'
+import { Link, useHistory } from "react-router-dom";
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles({
     container: {
         // marginLeft: 32,
         // marginRight: 32,
@@ -77,16 +77,22 @@ const styles = StyleSheet.create({
     }
 });
 
-const ProfileBarComponent = (props) => {
-    const signOut = (event) => { localStorage.removeItem('access_token'); };
+export default function ProfileBarComponent(props) {
+    const classes = useStyles();
+    const history = useHistory();
+
+    const logOut = (event) => { 
+        localStorage.removeItem('access_token');
+        history.push("/login");
+    };
 
     return (
-        <Row className={css(styles.container)} horizontal="start" vertical="center">
-            <div className={css(styles.proPic)}></div>
-            <div className={css(styles.title)}>{props.username}</div>
-            <div className={css(styles.frameR)}>{props.frameRating}</div>
-            <Link className={css(styles.logoutB)} to="/login">
-                <img className={css(styles.logout)} src="/assets/logout.svg" onClick={signOut} ></img>
+        <Row className={ classes.container } horizontal="start" vertical="center">
+            <div className={ classes.proPic }></div>
+            <div className={ classes.title }>{ props.username }</div>
+            <div className={ classes.frameR }>{ props.frameRating }</div>
+            <Link className={ classes.logoutB } to="/login">
+                <img className={ classes.logout } src="/assets/logout.svg" alt="Logout" onClick={ logOut } ></img>
             </Link>
         </Row>
     );
@@ -96,5 +102,3 @@ ProfileBarComponent.defaultProps = {
     username: "My Profile",
     frameRating: 100,
 };
-
-export default ProfileBarComponent;

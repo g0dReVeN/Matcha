@@ -113,11 +113,6 @@ const ResetPasswordComponent = (props) => {
 	const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
-	
-	// const loginScreen = event => {
-    //     event.preventDefault();
-    //     props.resetPassword(false);
-    // };
 
     const resetPassword = event => {
         event.preventDefault();

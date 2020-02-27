@@ -85,7 +85,7 @@ const useStyles = makeStyles({
 const LoginComponent = (props) => {
     // const { icon, title, ...otherProps } = props;
     const classes = useStyles();
-    let history = useHistory();
+    const history = useHistory();
 
     // const preventDefault = event => event.preventDefault();
 
@@ -125,7 +125,7 @@ const LoginComponent = (props) => {
             password: values.password,
         };
 
-        axios.post('http://localhost:5000' + '/login', userInfo)
+        axios.post('http://localhost:5000/login', userInfo)
             .then(res => {
                 // console.log(res.data.token);
                 if (res.status === 200) {

@@ -122,7 +122,7 @@ const RegisterComponent = (props) => {
             password: values.password,
         };
 
-        axios.post('http://localhost:5000' + '/register', userInfo)
+        axios.post('http://localhost:5000/register', userInfo)
             .then(res => {
                 console.log(res.data);
                 if (res.status === 200)

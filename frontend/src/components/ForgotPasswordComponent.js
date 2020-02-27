@@ -102,11 +102,7 @@ const ForgotPasswordComponent = (props) => {
     const handleChange = value => event => {
         setValues({ ...values, [value]: event.target.value });
     };
-	
-	const loginScreen = event => {
-        event.preventDefault();
-        props.resetPassword(false);
-    };
+
 
     const forgotPassword = event => {
         event.preventDefault();
