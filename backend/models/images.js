@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const imagesSchema = new Schema({
+const userImagesSchema = new Schema({
     userId: {
-        type: 
-    }
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    imageList: [null, null, null, null, null],
+    profileImage: String
 });
 
-module.exports = mongoose.model('Images', imagesSchema);
+module.exports = mongoose.model('Images', userImagesSchema);

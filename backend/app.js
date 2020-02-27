@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const logger = require("morgan");
-const compression = require('compression')
+
 require('dotenv').config();
 
 const app = express();
@@ -10,7 +10,6 @@ const app = express();
 const port = process.env.PORT;
 const mongodb_uri = process.env.ATLAS_URI;
 
-app.use(compression());
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +19,7 @@ const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
 
 app.use(authRouter);
-app.use('/admin', adminRouter);
+app.use('/user', adminRouter);
 
 mongoose
     .connect(mongodb_uri,

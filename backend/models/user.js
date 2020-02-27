@@ -31,7 +31,7 @@ const userSchema = new Schema({
         min: -100,
         max: 100
     },
-    gender: Number,
+    gender: Boolean,
     sexualPreference: {
         type: Number,
         default: '0'
