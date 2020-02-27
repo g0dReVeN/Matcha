@@ -6,10 +6,14 @@ router.post('/register', authController.postRegistration);
 
 router.post('/login', authController.postLogin);
 
-router.post('/logout', authController.postLogout);
+router.post('/forgotPassword', authController.postForgotPassword);
+
+router.post('/changePassword', authController.postChangePassword);
+
+router.post('/validateResetToken', authController.postValidateResetToken);
 
 router.get('/', isAuth, (req, res) => { return res.status(200).json({ success: true, msg: 'Token valid' }) });
 
-router.get('/confirm/:token', authController.getUserConfirmation);
+router.post('/confirm', authController.getUserConfirmation);
 
 module.exports = router;
