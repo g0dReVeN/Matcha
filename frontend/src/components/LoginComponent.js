@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Row, Column } from 'simple-flexbox';
 import { Link, useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import IconButton from '@material-ui/core/IconButton';
@@ -80,6 +81,14 @@ const useStyles = makeStyles({
             textDecorationLine: 'underline',
         },
     },
+    msg: {
+        width: 300,
+        // height: 80,
+        fontSize: 16,
+        // backgroundColor: 'white',
+        // wordWrap: 'break-word',
+        // color: values.color,
+    },
 });
 
 const LoginComponent = (props) => {
@@ -93,6 +102,7 @@ const LoginComponent = (props) => {
         username: '',
         password: '',
         showPassword: false,
+        resMsg: '',
     });
 
     const handleChange = value => event => {
@@ -129,6 +139,7 @@ const LoginComponent = (props) => {
             .then(res => {
                 // console.log(res.data.token);
                 if (res.status === 200) {
+                    localStorage.clear();
                     localStorage.access_token = res.data.token;
                     history.push("/");
                 }
@@ -142,6 +153,7 @@ const LoginComponent = (props) => {
                 <Column className={classes.root} vertical="center" horizontal="center">
                     <form className={classes.form} noValidate autoComplete="off">
                         <Column vertical="center" horizontal="center">
+                            <Typography className={classes.msg} style={{ color: values.color }} >{ values.resMsg }</Typography>
                             <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
                             <FormControl required className={classes.field} variant="outlined">
                                 <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>

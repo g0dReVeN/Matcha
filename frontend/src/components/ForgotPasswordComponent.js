@@ -108,7 +108,7 @@ const ForgotPasswordComponent = (props) => {
         event.preventDefault();
 
         if (values.username) {
-            // axios.post('http://localhost:5000' + '/forgotPassword', { username: values.username })
+            // axios.post('http://localhost:5000' + '/forgotPassword', { username: values.username, forgot: true })
             //     .then(res => {
             //         if (res.status === 200)
             //             setValues({ color: 'green', resMsg: res.msg });

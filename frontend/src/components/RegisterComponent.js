@@ -164,8 +164,8 @@ const RegisterComponent = (props) => {
                                     labelWidth={70}
                                 />
                             </FormControl>
-                            <Button className={classes.btn} variant="contained" onClick={registerUser}>Register</Button>
                             <Link className={classes.text} to="/login">Login Instead?</Link>
+                            <Button className={classes.btn} variant="contained" onClick={registerUser}>Register</Button>
                         </Column>
                     </form>
                 </Column>

@@ -34,7 +34,7 @@ const useStyles = makeStyles({
         color: '#FFF',
         cursor: 'pointer',
     },
-    frameR: {
+    fameR: {
         right: 60,
         position: 'absolute',
         backgroundColor: '#FFF',
@@ -78,6 +78,7 @@ const useStyles = makeStyles({
 });
 
 export default function ProfileBarComponent(props) {
+    console.log(props)
     const classes = useStyles();
     const history = useHistory();
 
@@ -90,7 +91,7 @@ export default function ProfileBarComponent(props) {
         <Row className={ classes.container } horizontal="start" vertical="center">
             <div className={ classes.proPic }></div>
             <div className={ classes.title }>{ props.username }</div>
-            <div className={ classes.frameR }>{ props.frameRating }</div>
+            <div className={ classes.fameR }>{ props.fameRating }</div>
             <Link className={ classes.logoutB } to="/login">
                 <img className={ classes.logout } src="/assets/logout.svg" alt="Logout" onClick={ logOut } ></img>
             </Link>
@@ -100,5 +101,5 @@ export default function ProfileBarComponent(props) {
 
 ProfileBarComponent.defaultProps = {
     username: "My Profile",
-    frameRating: 100,
+    fameRating: 100,
 };

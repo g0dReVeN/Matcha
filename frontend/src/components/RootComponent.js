@@ -21,10 +21,10 @@ const useStyles = makeStyles({
 
 export default (props) => {
 	const classes = useStyles();
-
+	
 	return (
 		<Row className={ classes.container }>
-			<SideBarComponent userInfo={ props.fetchInitialData } />
+			<SideBarComponent userInfo={ props.fetchInitialData() } />
 			<Column className={ classes.mainBlock } vertical="flex-start" horizontal="center">
 				<HeaderComponent />
 				<MainContentComponent />

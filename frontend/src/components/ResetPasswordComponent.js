@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles'
 import { Row, Column } from 'simple-flexbox';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -92,8 +92,14 @@ const useStyles = makeStyles({
     },
 });
 
-const ResetPasswordComponent = (props) => {
+export default (props) => {
     // const { icon, title, ...otherProps } = props;
+    // console.log('match', props);
+    if (!props.fetchInitialData(props.match.params.resetToken))
+        return (
+            <Redirect to="/404" />
+        )
+
     console.log('match', props);
     const classes = useStyles();
 
@@ -173,5 +179,3 @@ const ResetPasswordComponent = (props) => {
         </Row>
     );
 };
-
-export default ResetPasswordComponent;
