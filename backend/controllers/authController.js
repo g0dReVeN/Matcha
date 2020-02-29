@@ -5,7 +5,7 @@ const User = require('../models/user');
 const ResetToken = require('../models/resetToken');
 
 const signToken = require('../middleware/jwtAuth').signToken;
-const transporter = require('../config/sendgrid');
+const transporter = require('../config/nodemailer');
 
 exports.postRegistration = (req, res, next) => {
   const username = req.body.username;
