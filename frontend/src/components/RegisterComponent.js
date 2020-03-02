@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Row, Column } from 'simple-flexbox';
 import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import IconButton from '@material-ui/core/IconButton';
@@ -56,6 +57,12 @@ const useStyles = makeStyles({
         backgroundColor: '#FFF',
         color: '#ff596a',
     },
+    field2: {
+        width: 300,
+        margin: '0px',
+        backgroundColor: '#FFF',
+        color: '#ff596a',
+    },
     btn: {
         width: 300,
         textAlign: 'center',
@@ -80,6 +87,14 @@ const useStyles = makeStyles({
             textDecorationLine: 'underline',
         },
     },
+    msg: {
+        width: 300,
+        // height: 80,
+        fontSize: 16,
+        // backgroundColor: 'white',
+        // wordWrap: 'break-word',
+        // color: values.color,
+    },
 });
 
 const RegisterComponent = (props) => {
@@ -92,6 +107,7 @@ const RegisterComponent = (props) => {
         email: '',
         password: '',
         showPassword: false,
+        resMsg: '',
     });
 
     const handleChange = value => event => {
@@ -122,12 +138,18 @@ const RegisterComponent = (props) => {
             password: values.password,
         };
 
-        axios.post('http://localhost:5000/register', userInfo)
+        let flag = false
+
+        axios.post(process.env.REACT_APP_API + '/register', userInfo)
             .then(res => {
                 console.log(res.data);
                 if (res.status === 200)
-                    props.registerScreen(false);
+                    setValues({ color: 'green', resMsg: res.msg });
+                else
+                    setValues({ color: 'red', resMsg: res.msg });
             });
+        // setValues({ color: 'green', resMsg: 'jou ma se poes' });
+        // document.getElementById("outlined-adornment-password").focus();
     };
 
     return (
@@ -137,7 +159,8 @@ const RegisterComponent = (props) => {
                 <Column className={classes.root} vertical="center" horizontal="center">
                     <form className={classes.form} noValidate autoComplete="off">
                         <Column vertical="center" horizontal="center">
-                            <TextField required className={classes.field} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
+                            <Typography className={classes.msg} style={{ color: values.color }} >{ values.resMsg }</Typography>
+                            <TextField required className={classes.field2} label="Email" variant="outlined" value={values.email} onChange={handleChange('email')}/>
                             <TextField required className={classes.field} label="Username" variant="outlined" value={values.username} onChange={handleChange('username')}/>
                             <TextField required className={classes.field} label="Surname" variant="outlined" value={values.lastname} onChange={handleChange('lastname')}/>
                             <TextField required className={classes.field} label="First Name" variant="outlined" value={values.firstname} onChange={handleChange('firstname')}/>
