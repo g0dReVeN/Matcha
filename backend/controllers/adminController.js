@@ -1,6 +1,5 @@
 const User = require('../models/user');
 const History = require('../models/history');
-const Tags = require('../models/tags');
 const UserImages = require('../models/images');
 
 exports.postProfile = (req, res, next) => {
@@ -19,18 +18,11 @@ exports.postProfile = (req, res, next) => {
             user.sexualPreference = sexualPreference;
             user.biography = biography;
             user.completedProfile = true;
+            user.tags = tags;
             user.save(err => {
                 if (err)
                     return res.status(500).json({ msg: 'Internal server error', err });
-                const newTags = new Tags({
-                    userId: req.user._id,
-                    tags: tags
-                });
-                newTags.save(err => {
-                    if (err)
-                        return res.status(500).json({ success: false, msg: 'Internal server error', err });
-                    return res.status(200).json({ success: true, msg: 'User profile updated' });
-                });
+                return res.status(200).json({ success: true, msg: 'User profile updated' });
             });
         })
         .catch(err => {
@@ -39,6 +31,24 @@ exports.postProfile = (req, res, next) => {
 }
 
 exports.getFilteredUsers = (req, res, next) => {
+    const age = {
+        low: req.body.age.low,
+        high: req.body.age.high
+    };
+    const fame_rating = {
+        low: req.body.fame_rating.low,
+        high: req.body.fame_rating.high
+    };
+    const tags = req.body.tags;
+    const sexualPreference = req.body.sexualPreference;
+
+    User.find({
+        age: { $lt: age.low, $gt: age.high },
+        fameRating: { $lt: fame_rating.low, $gt: fame_rating.high },
+        sexualPreference: sexualPreference,
+        tags: { $in: tags }
+    })
+
     let profileImage = null;
     UserImages.findOne({ userId: req.user._id })
         .then(images => {

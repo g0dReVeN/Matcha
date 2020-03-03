@@ -183,27 +183,27 @@ exports.postForgotPassword = (req, res, next) => {
           return res.status(500).json({ success: false, msg: 'Internal server error', err });
         const statusToken = buffer.toString('hex');
         ResetToken.findOne({ userId: user._id })
-        .then(tokenObject => {
-          tokenObject.resetToken = statusToken;
-          tokenObject.resetTokenExpiration = Date.now() + 864000000;
-          tokenObject.save();
-          if (forgot) {
-            res.status(200).json({ success: true, msg: 'Change password email has been sent to the user' });
-            return transporter.sendMail({
-              to: user.email,
-              from: 'thepeople@matcha.com',
-              subject: 'Request for password change',
-              html: `
+          .then(tokenObject => {
+            tokenObject.resetToken = statusToken;
+            tokenObject.resetTokenExpiration = Date.now() + 864000000;
+            tokenObject.save();
+            if (forgot) {
+              res.status(200).json({ success: true, msg: 'Change password email has been sent to the user' });
+              return transporter.sendMail({
+                to: user.email,
+                from: 'thepeople@matcha.com',
+                subject: 'Request for password change',
+                html: `
                     <h1>Forgot Password!</h1>
                     <p>Click this <a href="http://localhost:3000/changePassword/${statusToken}">link</a> to continue.</p>
                   `
-            });
-          }
-          return res.status(200).json({ success: true, msg: 'Token attached', resetToken: statusToken });
-        })
-        .catch(err => {
-          return res.status(500).json({ status: false, msg: 'Internal server error', err });
-        });
+              });
+            }
+            return res.status(200).json({ success: true, msg: 'Token attached', resetToken: statusToken });
+          })
+          .catch(err => {
+            return res.status(500).json({ status: false, msg: 'Internal server error', err });
+          });
       });
     })
     .catch(err => {
@@ -239,12 +239,12 @@ exports.postValidateResetToken = (req, res, next) => {
   const resetToken = req.body.resetToken;
 
   ResetToken.findOne({ resetToken: resetToken, resetTokenExpiration: { $gt: Date.now() } })
-  .then(resetObject => {
-    if (resetObject)
-      return res.status(200).json({ success: true, msg: "Reset Token valid" });
-    return res.status(400).json({ success: false, msg: "Reset Token invalid" });
-  })
-  .catch(err => {
-    return res.status(500).json({ success: false, msg: 'Internal server error', err });
-  });
+    .then(resetObject => {
+      if (resetObject)
+        return res.status(200).json({ success: true, msg: "Reset Token valid" });
+      return res.status(400).json({ success: false, msg: "Reset Token invalid" });
+    })
+    .catch(err => {
+      return res.status(500).json({ success: false, msg: 'Internal server error', err });
+    });
 }

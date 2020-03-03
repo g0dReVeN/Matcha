@@ -23,6 +23,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    tags: Array,
     age: Number,
     location: {
         lat: Number,
