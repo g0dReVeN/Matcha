@@ -1,12 +1,12 @@
 const fs = require('fs');
 const multer = require('multer')
-const dir = '../imgUploads';
+const dir = './imgUploads';
 const path = require('path');
 
 module.exports = multer({
     storage: multer.diskStorage({
         destination: (req, file, callback) => {
-            console.log("Inside multer middleware");
+            console.log(file);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
             }

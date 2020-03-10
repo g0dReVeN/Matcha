@@ -30,7 +30,8 @@ exports.postRegistration = (req, res, next) => {
               firstname: firstname,
               lastname: lastname,
               email: email,
-              password: hashedPassword
+              password: hashedPassword,
+              tags: ["all"]
             });
             user.save()
               .then(newUser => {
@@ -111,6 +112,27 @@ exports.postRegistration = (req, res, next) => {
 //   });
 //   return res.status(200).json({ success: true, msg: 'Users successfully created!' });
 // }
+
+// Editing/Adding properties of multiple users for testing
+exports.postUsersEditTest = (req, res, next) => {
+
+  let counter = 3;
+
+  User.find()
+    .then(users => {
+      users.forEach(user => {
+        if (counter >= 0) {
+          user.tags = ["_all", "some"];
+          user.save();
+        }
+        counter = counter - 1;
+      });
+      return res.status(200).json({ success: true, msg: 'Users successfully edited' });
+    })
+    .catch(err => {
+      return res.status(500).json({ success: false, msg: 'Internal server error', err });
+    });
+}
 
 exports.postLogin = (req, res, next) => {
   const username = req.body.username;

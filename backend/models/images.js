@@ -8,7 +8,7 @@ const userImagesSchema = new Schema({
         ref: 'User',
         required: true
     },
-    imageList: [null, null, null, null, null],
+    imageList: Array,
     profileImage: String
 });
 

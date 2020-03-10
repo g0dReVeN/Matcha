@@ -8,7 +8,12 @@ const historySchema = new Schema({
         required: true,
         ref: 'User'
     },
-    historyList: [{ type : Schema.Types.ObjectId, ref: 'User' }]
+    historyList: [
+        {
+            user: { type: Schema.Types.ObjectId, ref: 'User' },
+            like: Boolean
+        }
+    ]
 });
 
 module.exports = mongoose.model('History', historySchema);

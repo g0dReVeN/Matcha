@@ -6,13 +6,15 @@ const imgUpload = require('../middleware/multer');
 
 const router = express.Router();
 
-router.get('/users', isAuth , adminController.getFilteredUsers);
+// router.get('/users', isAuth , adminController.getFilteredUsers);
 
 router.post('/profile', isAuth , adminController.postProfile);
 
 router.post('/addHistory', isAuth , adminController.postHistory);
 
-router.post('/addImages', /* isAuth, */ imgUpload.any(), adminController.postUserImages);
+router.get('/retrieveFilteredUsers', isAuth, adminController.getFilteredUsers);
+
+router.post('/addImages', /** isAuth, */ imgUpload.any(), adminController.postUserImages);
 
 router.get('/userImages/:username', isAuth, adminController.getUserImages);
 
