@@ -181,7 +181,7 @@ RESPONSE	-	SUCCESSFUL
 
 >>USER ENDPOINTS<<
 
-Update profile:
+Update profile (Format of location still needs to be decided):
 URL			-	http://localhost:5000/user/profile
 METHOD		-	POST
 BODY		-	{
@@ -189,12 +189,12 @@ BODY		-	{
 					location: {
 						lat: Number,
 						long, Number
-					}
-				},
-				gender: Boolean,
-				sexualPreference: Number (0: bisexual, 1: male, 2: female),
-				biography: String,
-				tags: [String]
+					},
+					gender: Boolean,
+					sexualPreference: Number (0: bisexual, 1: male, 2: female),
+					biography: String,
+					tags: [String]
+				}
 RESPONSE	-	SUCCESSFUL
 				http code 200
 				{
@@ -202,6 +202,67 @@ RESPONSE	-	SUCCESSFUL
 					msg: "User profile updated"
 				}
 			-	UNSUCCESSFUL
+				http code 500
+				{
+					success: false,
+					msg: "Internal server error",
+					{err}
+				}
+
+Retrieve users (based on filters):
+URL			-	http://localhost:5000/user/retrieveFilteredUsers
+METHOD		-	GET
+BODY		-	{
+					age: {
+						low: Number,
+						high: Number
+					},
+					fame_rating: {
+						low: Number,
+						high: Number
+					},
+					tags: Array,
+					(Still to be added:
+						location: {
+							lat: Number,
+							long, Number
+						}
+					)
+				}
+RESPONSE	-	SUCCESSFUL
+				http code 200
+				{
+					success: true,
+					msg: "Found users mathcing filters"
+				}
+			-	UNSUCCESSFUL
+				http code 500
+				{
+					success: false,
+					msg: "Internal server error",
+					{err}
+				}
+
+Post a new history document (A new document is added to history when a user likes or dislikes another user):
+URL			-	http://localhost:5000/user/addHistory
+METHOD		-	POST
+BODY		-	{
+					user: Number(Mongoose.Schema.Types.ObjectId),
+					like: Boolean
+				}
+RESPONSE	-	SUCCESSFUL
+				http code 200
+				{
+					success: true,
+					msg: "History added"
+				}
+			-	UNSUCCESSFUL
+				http code 500
+				{
+					success: false,
+					msg: "Error adding history",
+					{err}
+				}
 				http code 500
 				{
 					success: false,

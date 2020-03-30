@@ -3,6 +3,9 @@ const History = require('../models/history');
 const UserImages = require('../models/images');
 
 exports.postProfile = (req, res, next) => {
+
+  // Still need to find a way to update properties where the corresponding values are given
+
   const age = req.body.age;
   const location = req.body.location;
   const gender = req.body.gender;
@@ -86,7 +89,7 @@ exports.postHistory = (req, res, next) => {
           .then(result => {
             if (!result)
               return res.status(500).json({ success: false, msg: 'Internal server error', err });
-            return res.status(200).json({ success: true, msg: 'History added!' });
+            return res.status(200).json({ success: true, msg: 'History added' });
           })
           .catch(err => {
             return res.status(500).json({ success: false, msg: 'Internal server error', err });
@@ -96,9 +99,9 @@ exports.postHistory = (req, res, next) => {
         console.log(history);
         history.save(err => {
           if (err) {
-            return res.status(400).json({ success: false, msg: 'Error adding history', err });
+            return res.status(500).json({ success: false, msg: 'Error adding history', err });
           }
-          return res.status(200).json({ success: true, msg: 'History added!' });
+          return res.status(200).json({ success: true, msg: 'History added' });
         });
       }
     })
@@ -113,11 +116,15 @@ exports.postUserImages = (req, res, next) => {
     .findOne({ "userId": "5e58344e07a09f3d72085a5e" })
     .then(userImages => {
       if (!userImages) {
-        let imageList = req.files.filter((file, index) => {
-          if (index === 0)
-            return false;
-          return true;
-        }).map(file => file.filename );
+        let imageList = [null, null, null, null];
+        let profileImage = null;
+        req.files.forEach(file => {
+          const fileNameNum = file.fieldname.charAt(3);
+          if (fileNameNum !== '0' && file.fieldname.substring(0, 3) === 'img' && !isNaN(fileNameNum))
+            imageList[fileNameNum - 1] = file.filename;
+          else if (fileNameNum === '0' && file.fieldname.substring(0, 3) === 'img')
+            profileImage = file.filename;;
+        });
         userImages = new UserImages({
           userId: "5e58344e07a09f3d72085a5e",
           imageList: imageList,
@@ -125,11 +132,19 @@ exports.postUserImages = (req, res, next) => {
         });
       }
       else {
-        req.files.foreach((elem, index) => {
-          if (elem.fieldname.charAt(str.length - 1) === 0)
-            userImages.profileImage = elem.filename;
-          else
-            userImages.imageList[elem.fieldname.charAt(str.length - 1)] = elem.filename;
+        // req.files.foreach((elem, index) => {
+        //   if (elem.fieldname.charAt(str.length - 1) === 0)
+        //     userImages.profileImage = elem.filename;
+        //   else
+        //     userImages.imageList[elem.fieldname.charAt(str.length - 1)] = elem.filename;
+        // });
+        req.files.forEach(file => {
+          const fileNameNum = file.fieldname.charAt(3);
+          const imgName = file.fieldname.substring(0, 3) === 'img';
+          if (fileNameNum !== '0' && imgName && !isNaN(fileNameNum))
+            userImages.imageList[parseInt(fileNameNum) - 1] = file.filename;
+          else if (fileNameNum === '0' && imgName)
+            userImages.profileImage = file.filename;
         });
       }
       userImages.save(err => {
